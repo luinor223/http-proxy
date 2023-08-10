@@ -4,7 +4,29 @@ import threading
 import time as pytime
 from configparser import ConfigParser
 from datetime import datetime, time 
-    
+
+def read_config_file(filename):
+    config = ConfigParser()
+    config.read(filename)
+
+    # Get values from the "default" section
+    cache_time = config.getint('default', 'cache_time')
+    whitelisting = config.get('default', 'whitelisting')
+    time = config.get('default', 'time')
+    timeout = int(config.get('default', 'timeout'))
+    enabling_whitelist = config.getboolean('default', 'enabling_whitelist')
+    time_restriction = config.getboolean('default', 'time_restriction')
+    max_recieve = config.getint('default', 'max_recieve')
+
+    # Process the whitelisting string into a list
+    whitelist = [item.strip() for item in whitelisting.split(',')]
+    timelist = [timeline.strip() for timeline in time.split('-')]
+
+    return cache_time, whitelist, timelist, timeout, enabling_whitelist, time_restriction, max_recieve
+
+file_path = 'config.ini'
+cache_time, whitelist, timelist, timeout, enabling_whitelist, time_restriction, max_recieve = read_config_file(file_path)
+
 def process_request(request):
     first_line = request.split("\r\n")[0]
     method = first_line.split(" ")[0]
@@ -36,16 +58,47 @@ def process_request(request):
     return method, url, webserver, port
 
 def send_403_response(client_socket):
-    header = "HTTP/1.0 403 Forbidden\r\n"
+    header = "HTTP/1.1 403 Forbidden\r\n"
     header += "Content-Type: text/html\r\n\r\n"
     with open("403.html", 'r') as file:
         content = file.read()
     client_socket.send(header.encode() + content.encode())
     return
+
+def is_in_whitelist(url):
+    for link in whitelist:
+        if url in link:
+            return True
+    return False
     
+def proxy_create(client_socket, webserver, port, ProxyClientSock): 
+    if enabling_whitelist:
+        if not is_in_whitelist(webserver):
+            send_403_response(client_socket)
+            client_socket.close()
+            return
+    try:
+        ProxyClientSock.connect((webserver, port))
+        ProxyClientSock.send(request.encode())
+        while 1:
+            #Receive response from webserver
+            message = ProxyClientSock.recv(max_recieve)
+            #Send response to client
+            client_socket.send(message)
+            if len(message) <= 0:
+                break
+        client_socket.close()
+        ProxyClientSock.close()
+    except:
+        send_403_response(client_socket)
+        print("Connection timed out. Unable to connect to the server.")
+        ProxyClientSock.close()
+        client_socket.close()
+        return
+
 def handle_client(client_socket, client_address):
     #Receive request from Client
-    request = client_socket.recv(4096).decode()
+    request = client_socket.recv(max_recieve).decode()
     method, url, webserver, port = process_request(request)
     
     #Check method
@@ -56,15 +109,22 @@ def handle_client(client_socket, client_address):
     #Request to webserver
     print(f"Request from {client_address} : {method} {url}")
     ProxyClientSock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    ProxyClientSock.connect((webserver, port))
-    ProxyClientSock.send(request.encode())
-    while 1:
-        #Receive response from webserver
-        message = ProxyClientSock.recv(4096)
-        #Send response to client
-        client_socket.send(message)
-        if len(message) <= 0:
-            break
+    if method == "GET":
+        temp_url = url.strip('/')
+        if temp_url == "":
+            res_url = 'index.html'
+            ctype = "text/html"
+        elif temp_url == "favicon.ico":
+            res_url = temp_url
+            ctype = "image/x-icon"
+        else:
+            res_url = temp_url
+            ctype = "application/x-www-form-urlencoded"
+        try:
+            with open(res_url, 'rb') as url_file:
+                resdata = url_file.read()
+        except IOError:
+            proxy_create(client_socket, webserver, port, ProxyClientSock)
     
     client_socket.close()
         
@@ -79,7 +139,7 @@ def main():
 
     tcpSerSock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     tcpSerSock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
-    tcpSerSock.settimeout(30)
+    tcpSerSock.settimeout(timeout)
     tcpSerSock.bind((HOST, Port))
     tcpSerSock.listen(5)
     print(f'Server running on {HOST}:{Port}')
