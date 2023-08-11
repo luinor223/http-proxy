@@ -24,6 +24,7 @@ def read_config_file(filename):
 
     return cache_time, whitelist, timelist, timeout, enabling_whitelist, time_restriction, max_recieve
 
+cache = {}
 file_path = 'config.ini'
 cache_time, whitelist, timelist, timeout, enabling_whitelist, time_restriction, max_recieve = read_config_file(file_path)
 
@@ -70,7 +71,14 @@ def is_in_whitelist(url):
         if url in link:
             return True
     return False
-    
+
+def time_check(time):
+    start = timelist[0]
+    end = timelist[1]
+    if start <= time <= end:
+        return True
+    return False    
+
 def proxy_create(client_socket, webserver, port, ProxyClientSock): 
     if enabling_whitelist:
         if not is_in_whitelist(webserver):
