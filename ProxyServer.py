@@ -79,28 +79,29 @@ def time_check(time):
         return True
     return False    
 
-def proxy_create(client_socket, webserver, port, ProxyClientSock): 
+def proxy_create(client_socket, webserver, port, request): 
     if enabling_whitelist:
         if not is_in_whitelist(webserver):
             send_403_response(client_socket)
             client_socket.close()
             return
+    proxy_client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     try:
-        ProxyClientSock.connect((webserver, port))
-        ProxyClientSock.send(request.encode())
+        proxy_client_socket.connect((webserver, port))
+        proxy_client_socket.send(request.encode())
         while 1:
             #Receive response from webserver
-            message = ProxyClientSock.recv(max_recieve)
+            message = proxy_client_socket.recv(max_recieve)
             #Send response to client
             client_socket.send(message)
-            if len(message) <= 0:
+            if len(message) <= max_recieve:
                 break
         client_socket.close()
-        ProxyClientSock.close()
+        proxy_client_socket.close()
     except:
         send_403_response(client_socket)
         print("Connection timed out. Unable to connect to the server.")
-        ProxyClientSock.close()
+        proxy_client_socket.close()
         client_socket.close()
         return
 
@@ -117,7 +118,8 @@ def handle_client(client_socket, client_address):
     #Request to webserver
     print(f"Request from {client_address} : {method} {url}")
     ProxyClientSock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    proxy_create(client_socket, webserver, port, ProxyClientSock)
+    if method == "GET":
+        proxy_create(client_socket, webserver, port, ProxyClientSock)
     
     client_socket.close()
         
