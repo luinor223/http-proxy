@@ -110,21 +110,7 @@ def handle_client(client_socket, client_address):
     print(f"Request from {client_address} : {method} {url}")
     ProxyClientSock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     if method == "GET":
-        temp_url = url.strip('/')
-        if temp_url == "":
-            res_url = 'index.html'
-            ctype = "text/html"
-        elif temp_url == "favicon.ico":
-            res_url = temp_url
-            ctype = "image/x-icon"
-        else:
-            res_url = temp_url
-            ctype = "application/x-www-form-urlencoded"
-        try:
-            with open(res_url, 'rb') as url_file:
-                resdata = url_file.read()
-        except IOError:
-            proxy_create(client_socket, webserver, port, ProxyClientSock)
+        proxy_create(client_socket, webserver, port, ProxyClientSock)
     
     client_socket.close()
         
