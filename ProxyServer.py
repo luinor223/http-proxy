@@ -117,8 +117,7 @@ def handle_client(client_socket, client_address):
     #Request to webserver
     print(f"Request from {client_address} : {method} {url}")
     ProxyClientSock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    if method == "GET":
-        proxy_create(client_socket, webserver, port, ProxyClientSock)
+    proxy_create(client_socket, webserver, port, ProxyClientSock)
     
     client_socket.close()
         
