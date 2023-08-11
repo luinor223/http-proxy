@@ -67,11 +67,11 @@ def handle_chunked_response(proxy_client_sock):
 
     return response
 
-def handle_response(sock):
+def handle_response(proxy_client_socket):
     # Read and process headers
     headers = b""
     while True:
-        headers += sock.recv(1)
+        headers += proxy_client_socket.recv(1)
         if b"\r\n\r\n" in headers:
             break
     
@@ -79,7 +79,7 @@ def handle_response(sock):
     response_data = headers
     print(response_data.decode())
     if b"Transfer-Encoding: chunked" in headers:
-        response_data += handle_chunked_response(sock)
+        response_data += handle_chunked_response(proxy_client_socket)
         return response_data
     
     # Process regular response with Content-Length
@@ -92,7 +92,7 @@ def handle_response(sock):
     remaining_length = content_length
     while remaining_length > 0:
         chunk_size = min(remaining_length, 4096)
-        response_data += sock.recv(chunk_size)
+        response_data += proxy_client_socket.recv(chunk_size)
         remaining_length -= chunk_size
 
     return response_data
@@ -110,24 +110,24 @@ def handle_client(client_socket, client_address):
     
     print(f"[NEW] Request from {client_address} : {method} {url}")
     
-    #Request to webserver
-    ProxyClientSock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    #Request to webserver (create a socket as client)
+    proxy_client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     try:
-        ProxyClientSock.connect((webserver, port))
+        proxy_client_socket.connect((webserver, port))
     except:
         send_403_response(client_socket)
         print("Failed to connect to WebServer")
         return
-    ProxyClientSock.send(request.encode())
+    proxy_client_socket.send(request.encode())
     
-    response = handle_response(ProxyClientSock)
+    response = handle_response(proxy_client_socket)
         
     #Send response to client
     print(response)
     client_socket.send(response)
     print (f"Response sent to {client_address}\n\n")
     
-    ProxyClientSock.close()
+    proxy_client_socket.close()
     client_socket.close()
         
 
