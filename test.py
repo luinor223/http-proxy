@@ -72,8 +72,13 @@ def get_response_from_webserver(proxy_client_socket):
     headers = b""
     while True:
         headers += proxy_client_socket.recv(1)
-        if b"\r\n\r\n" in headers:
-            break
+        end_count = headers.count(b"\r\n\r\n")
+        if (b"Continue" in headers):
+            if end_count == 2:
+                break
+        else:
+            if end_count == 1:
+                break
     
     # Check for Transfer-Encoding: chunked
     response_data = headers

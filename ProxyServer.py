@@ -95,6 +95,64 @@ def time_check(time1):
         return True
     return False    
 
+def handle_chunked_response(proxy_client_sock):
+    response = b""
+    while True:
+        chunk_size_line = b""
+        while b"\r\n" not in chunk_size_line:
+            chunk_size_line += proxy_client_sock.recv(1)
+        
+        response += chunk_size_line
+        chunk_size = int(chunk_size_line.decode().strip("\r\n"), 16) + 2
+        
+        chunk_data = b""
+        remaining_length = chunk_size
+        while remaining_length > 0:
+            chunk_data += proxy_client_sock.recv(min(chunk_size, 4096))
+            remaining_length -= min(chunk_size, 4096)
+        
+        response += chunk_data
+        
+        if chunk_size == 2:
+            # Last chunk, end of response
+            break
+
+    return response
+
+def get_response_from_webserver(proxy_client_socket):
+    # Read and process headers
+    headers = b""
+    while True:
+        headers += proxy_client_socket.recv(1)
+        end_count = headers.count(b"\r\n\r\n")
+        if (b"Continue" in headers):
+            if end_count == 2:
+                break
+        else:
+            if end_count == 1:
+                break
+    
+    # Check for Transfer-Encoding: chunked
+    response_data = headers
+    print(response_data.decode())
+    if b"Transfer-Encoding: chunked" in headers:
+        response_data += handle_chunked_response(proxy_client_socket)
+        return response_data
+    
+    # Process regular response with Content-Length
+    content_length = 0
+    for line in headers.split(b"\r\n"):
+        if line.startswith(b"Content-Length:"):
+            content_length = int(line.split(b":")[1].strip())
+            break
+    
+    remaining_length = content_length #2 for the last \r\n
+    while remaining_length > 0:
+        chunk_size = min(remaining_length, 4096)
+        response_data += proxy_client_socket.recv(chunk_size)
+        remaining_length -= chunk_size
+
+    return response_data
 
 def proxy_create(client_socket, webserver, port, request, url): 
     if enabling_whitelist:
@@ -112,8 +170,8 @@ def proxy_create(client_socket, webserver, port, request, url):
             #Receive response from webserver
             message = proxy_client_socket.recv(max_recieve)
             response += message
-            #Send response to client
             
+            #Send response to client
             if len(message) <= 1024:
                 break
         client_socket.send(response)
@@ -131,6 +189,11 @@ def proxy_create(client_socket, webserver, port, request, url):
         proxy_client_socket.close()
         client_socket.close()
         return
+
+    response = get_response_from_webserver(proxy_client_socket)
+    #Send response to client
+    print(response)
+    client_socket.send(response)
 
 def handle_client(client_socket, client_address):
     #Receive request from Client
@@ -153,10 +216,12 @@ def handle_client(client_socket, client_address):
             send_403_response(client_socket)
             return
     #Request to webserver
-    print(f"Request from {client_address} : {method} {url}")
+    print(f"[NEW] Request from {client_address} : {method} {url}")
+    print(request)
+    print("------------------------------------------")
     
     proxy_create(client_socket, webserver, port, request, url)
-    
+    print (f"Response sent to {client_address}\n\n")
     client_socket.close()
         
 
@@ -166,6 +231,7 @@ def main():
     #     sys.exit(2)
 
     HOST = "127.0.0.1"
+    # HOST = sys.argv[1]
     Port = 8888
 
     tcpSerSock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
