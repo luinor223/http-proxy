@@ -117,19 +117,17 @@ def handle_client(client_socket, client_address):
     
     #Request to webserver
     print(f"Request from {client_address} : {method} {url}")
-    ProxyClientSock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    if method == "GET":
-        proxy_create(client_socket, webserver, port, ProxyClientSock)
+    proxy_create(client_socket, webserver, port, request)
     
     client_socket.close()
         
 
 def main():
-    if len(sys.argv) <= 1:
-        print('Usage : "python ProxyServer.py server_ip"\n[server_ip : It is the IP Address Of Proxy Server')
-        sys.exit(2)
+    # if len(sys.argv) <= 1:
+    #     print('Usage : "python ProxyServer.py server_ip"\n[server_ip : It is the IP Address Of Proxy Server')
+    #     sys.exit(2)
 
-    HOST = sys.argv[1]
+    HOST = "127.0.0.1"
     Port = 8888
 
     tcpSerSock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
