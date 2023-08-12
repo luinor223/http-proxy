@@ -119,7 +119,7 @@ def handle_chunked_response(proxy_client_sock):
 
     return response
 
-def get_response_from_webserver(proxy_client_socket, client_socket , url):
+def get_response_from_webserver(proxy_client_socket, client_socket , url, method):
     # Read and process headers
     headers = b""
     while True:
@@ -135,6 +135,10 @@ def get_response_from_webserver(proxy_client_socket, client_socket , url):
     # Check for Transfer-Encoding: chunked
     response = headers
     print(response.decode())
+    if method == "HEAD":
+        return response
+    
+    print(response.decode())
     if b"Transfer-Encoding: chunked" in headers:
         response += handle_chunked_response(proxy_client_socket)
         return response
@@ -146,6 +150,7 @@ def get_response_from_webserver(proxy_client_socket, client_socket , url):
             content_length = int(line.split(b":")[1].strip())
             break
     
+    print(content_length)
     remaining_length = content_length
     while remaining_length > 0:
         chunk_size = min(remaining_length, 4096)
@@ -203,7 +208,7 @@ def handle_client(client_socket, client_address):
         client_socket.close()
         return
     
-    response = get_response_from_webserver(proxy_client_socket, client_socket, url)
+    response = get_response_from_webserver(proxy_client_socket, client_socket, url, method)
     print(response)
     client_socket.send(response)
     print (f"Response sent to {client_address}\n\n")
