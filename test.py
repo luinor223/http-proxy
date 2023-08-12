@@ -51,13 +51,14 @@ def handle_chunked_response(proxy_client_sock):
             chunk_size_line += proxy_client_sock.recv(1)
         
         response += chunk_size_line
-        chunk_size = int(chunk_size_line.decode().strip("\r\n"), 16) + 2
+        chunk_size = int(chunk_size_line.strip(b'\r\n'), 16) + 2
         
         chunk_data = b""
         remaining_length = chunk_size
         while remaining_length > 0:
-            chunk_data += proxy_client_sock.recv(min(chunk_size, 4096))
-            remaining_length -= min(chunk_size, 4096)
+            msg = proxy_client_sock.recv(min(remaining_length, 4096))
+            chunk_data += msg
+            remaining_length -= len(msg)
         
         response += chunk_data
         
@@ -67,18 +68,18 @@ def handle_chunked_response(proxy_client_sock):
 
     return response
 
-def get_response_from_webserver(proxy_client_socket):
+def get_response_from_webserver(proxy_client_socket, client_socket):
     # Read and process headers
     headers = b""
-    while True:
+    while b"\r\n\r\n" not in headers:
         headers += proxy_client_socket.recv(1)
-        end_count = headers.count(b"\r\n\r\n")
-        if (b"Continue" in headers):
-            if end_count == 2:
-                break
-        else:
-            if end_count == 1:
-                break
+        
+    print(headers.decode())
+    if (b"Continue" in headers):
+        client_socket.sendall(headers)
+        headers = b""
+        while b"\r\n\r\n" not in headers:
+            headers += proxy_client_socket.recv(1)
     
     # Check for Transfer-Encoding: chunked
     response_data = headers
@@ -94,11 +95,13 @@ def get_response_from_webserver(proxy_client_socket):
             content_length = int(line.split(b":")[1].strip())
             break
     
-    remaining_length = content_length #2 for the last \r\n
+    remaining_length = content_length
     while remaining_length > 0:
         chunk_size = min(remaining_length, 4096)
-        response_data += proxy_client_socket.recv(chunk_size)
-        remaining_length -= chunk_size
+        msg = proxy_client_socket.recv(chunk_size)
+        response_data += msg
+        
+        remaining_length -= len(msg)
 
     return response_data
 
@@ -127,7 +130,7 @@ def handle_client(client_socket, client_address):
         print("Failed to connect to WebServer")
         return
     
-    response = get_response_from_webserver(proxy_client_socket)
+    response = get_response_from_webserver(proxy_client_socket, client_socket)
     
     #Send response to client
     print(response)
