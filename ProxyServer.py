@@ -111,12 +111,13 @@ def proxy_create(client_socket, webserver, port, request, url):
         while 1:
             #Receive response from webserver
             message = proxy_client_socket.recv(max_recieve)
-            response = response + message
+            response += message
             #Send response to client
             
-            if len(message) <= max_recieve:
+            if len(message) <= 1024:
                 break
         client_socket.send(response)
+        print(response)
         print("Adding response from request: ", url, "to cache\n")
 
         cache[url]={
@@ -153,27 +154,16 @@ def handle_client(client_socket, client_address):
             return
     #Request to webserver
     print(f"Request from {client_address} : {method} {url}")
-<<<<<<< Updated upstream
-    proxy_create(client_socket, webserver, port, request)
-=======
-    #ProxyClientSock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     
     proxy_create(client_socket, webserver, port, request, url)
->>>>>>> Stashed changes
     
     client_socket.close()
         
 
 def main():
-<<<<<<< Updated upstream
     # if len(sys.argv) <= 1:
     #     print('Usage : "python ProxyServer.py server_ip"\n[server_ip : It is the IP Address Of Proxy Server')
     #     sys.exit(2)
-=======
-    if len(sys.argv) <= 1:
-        print('Usage : "python ProxyServer.py server_ip"\n[server_ip : It is the IP Address Of Proxy Server')
-        sys.exit()
->>>>>>> Stashed changes
 
     HOST = "127.0.0.1"
     Port = 8888

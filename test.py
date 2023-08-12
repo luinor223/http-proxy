@@ -67,7 +67,7 @@ def handle_chunked_response(proxy_client_sock):
 
     return response
 
-def handle_response(proxy_client_socket):
+def get_response_from_webserver(proxy_client_socket):
     # Read and process headers
     headers = b""
     while True:
@@ -89,7 +89,7 @@ def handle_response(proxy_client_socket):
             content_length = int(line.split(b":")[1].strip())
             break
     
-    remaining_length = content_length
+    remaining_length = content_length #2 for the last \r\n
     while remaining_length > 0:
         chunk_size = min(remaining_length, 4096)
         response_data += proxy_client_socket.recv(chunk_size)
@@ -109,19 +109,21 @@ def handle_client(client_socket, client_address):
         return
     
     print(f"[NEW] Request from {client_address} : {method} {url}")
+    print(request)
+    print("------------------------------------------")
     
     #Request to webserver (create a socket as client)
     proxy_client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     try:
         proxy_client_socket.connect((webserver, port))
+        proxy_client_socket.send(request.encode())
     except:
         send_403_response(client_socket)
         print("Failed to connect to WebServer")
         return
-    proxy_client_socket.send(request.encode())
     
-    response = handle_response(proxy_client_socket)
-        
+    response = get_response_from_webserver(proxy_client_socket)
+    
     #Send response to client
     print(response)
     client_socket.send(response)
