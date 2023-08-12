@@ -154,47 +154,6 @@ def get_response_from_webserver(proxy_client_socket):
 
     return response_data
 
-def proxy_create(client_socket, webserver, port, request, url): 
-    if enabling_whitelist:
-        if not is_in_whitelist(webserver):
-            send_403_response(client_socket)
-            client_socket.close()
-            return
-    proxy_client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    
-    try:
-        proxy_client_socket.connect((webserver, port))
-        proxy_client_socket.send(request.encode())
-        response = b""
-        while 1:
-            #Receive response from webserver
-            message = proxy_client_socket.recv(max_recieve)
-            response += message
-            
-            #Send response to client
-            if len(message) <= 1024:
-                break
-        client_socket.send(response)
-        print(response)
-        print("Adding response from request: ", url, "to cache\n")
-
-        cache[url]={
-            "cache": response,
-        }
-        client_socket.close()
-        proxy_client_socket.close()
-    except:
-        send_403_response(client_socket)
-        print("Connection timed out. Unable to connect to the server.")
-        proxy_client_socket.close()
-        client_socket.close()
-        return
-
-    response = get_response_from_webserver(proxy_client_socket)
-    #Send response to client
-    print(response)
-    client_socket.send(response)
-
 def handle_client(client_socket, client_address):
     #Receive request from Client
     request = client_socket.recv(max_recieve).decode()
@@ -204,6 +163,11 @@ def handle_client(client_socket, client_address):
     if method not in ["GET", "POST", "HEAD"]:
         send_403_response(client_socket)
         return
+    if enabling_whitelist:
+        if not is_in_whitelist(webserver):
+            send_403_response(client_socket)
+            client_socket.close()
+            return
     if is_cache_valid(url):
         print(f"[*] SENDING CACHED RESPONSE FOR: {url}\n")
         client_socket.send(cache[url]["cache"])
@@ -215,13 +179,34 @@ def handle_client(client_socket, client_address):
             print("not in allowed time!")
             send_403_response(client_socket)
             return
-    #Request to webserver
+    #Request to webserver (create a socket as client)
     print(f"[NEW] Request from {client_address} : {method} {url}")
     print(request)
     print("------------------------------------------")
+    proxy_client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    try:
+        proxy_client_socket.connect((webserver, port))
+        proxy_client_socket.send(request.encode())
+        print("Adding response from request: ", url, "to cache\n")
+
+        cache[url]={
+            "cache": response,
+        }
+    except:
+        send_403_response(client_socket)
+        print("Failed to connect to WebServer")
+        proxy_client_socket.close()
+        client_socket.close()
+        return
     
-    proxy_create(client_socket, webserver, port, request, url)
+    response = get_response_from_webserver(proxy_client_socket)
+
+    # proxy_create(client_socket, webserver, port, request, url)
+    print(response)
+    client_socket.send(response)
     print (f"Response sent to {client_address}\n\n")
+    
+    proxy_client_socket.close()
     client_socket.close()
         
 
