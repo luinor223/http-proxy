@@ -94,12 +94,12 @@ def time_check(time1):
         return True
     return False    
 
-def handle_chunked_response(proxy_client_sock):
+def handle_chunked_response(webserver_socket):
     response = b""
     while True:
         chunk_size_line = b""
         while b"\r\n" not in chunk_size_line:
-            chunk_size_line += proxy_client_sock.recv(1)
+            chunk_size_line += webserver_socket.recv(1)
         
         response += chunk_size_line
         chunk_size = int(chunk_size_line.strip(b'\r\n'), 16) + 2
@@ -107,7 +107,7 @@ def handle_chunked_response(proxy_client_sock):
         chunk_data = b""
         remaining_length = chunk_size
         while remaining_length > 0:
-            msg = proxy_client_sock.recv(min(remaining_length, max_recieve))
+            msg = webserver_socket.recv(min(remaining_length, max_recieve))
             chunk_data += msg
             remaining_length -= len(msg)
         
@@ -129,7 +129,7 @@ def get_response_from_webserver(proxy_client_socket, client_socket , url, method
         if (b"100 Continue" not in headers):
                 break
             
-        client_socket.sendall(headers)
+        client_socket.send(headers)
         headers = b""
     
     # Check for Transfer-Encoding: chunked
@@ -139,7 +139,7 @@ def get_response_from_webserver(proxy_client_socket, client_socket , url, method
         return response
     
     print(response.decode())
-    if b"Transfer-Encoding: chunked" in headers:
+    if b"transfer-encoding: chunked" in headers.lower():
         response += handle_chunked_response(proxy_client_socket)
         return response
     
@@ -184,7 +184,7 @@ def handle_client(client_socket, client_address):
             return
     if is_cache_valid(url):
         print(f"[*] SENDING CACHED RESPONSE FOR: {url}\n")
-        client_socket.sendall(cache[url]["cache"])
+        client_socket.send(cache[url]["cache"])
         client_socket.close()
         return 
     if time_restriction:
@@ -197,23 +197,25 @@ def handle_client(client_socket, client_address):
     print(f"[NEW] Request from {client_address} : {method} {url}")
     print(request)
     print("------------------------------------------")
-    proxy_client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    webserver_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    sendmsg = f"{method} {url} HTTP/1.1\r\n" + f"Host: {webserver}\r\n" + f"Connection: Keep-Alive\r\n\r\n"
+    print(sendmsg.encode())
     try:
-        proxy_client_socket.connect((webserver, port))
-        proxy_client_socket.send(request.encode())
+        webserver_socket.connect((webserver, port))
+        webserver_socket.sendall(request.encode())
     except:
         send_403_response(client_socket)
         print("Failed to connect to WebServer")
-        proxy_client_socket.close()
+        webserver_socket.close()
         client_socket.close()
         return
     
-    response = get_response_from_webserver(proxy_client_socket, client_socket, url, method)
+    response = get_response_from_webserver(webserver_socket, client_socket, url, method)
     print(response)
     client_socket.send(response)
     print (f"Response sent to {client_address}\n\n")
     
-    proxy_client_socket.close()
+    webserver_socket.close()
     client_socket.close()
         
 
