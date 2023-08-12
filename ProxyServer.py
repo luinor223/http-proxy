@@ -146,7 +146,7 @@ def get_response_from_webserver(proxy_client_socket, client_socket , url, method
     # Process regular response with Content-Length
     content_length = 0
     for line in headers.split(b"\r\n"):
-        if line.startswith(b"Content-Length:"):
+        if line.lower().startswith(b"content-length:"):
             content_length = int(line.split(b":")[1].strip())
             break
     
@@ -198,11 +198,12 @@ def handle_client(client_socket, client_address):
     print(request)
     print("------------------------------------------")
     webserver_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    webserver_socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
     sendmsg = f"{method} {url} HTTP/1.1\r\n" + f"Host: {webserver}\r\n" + f"Connection: Keep-Alive\r\n\r\n"
     print(sendmsg.encode())
     try:
         webserver_socket.connect((webserver, port))
-        webserver_socket.sendall(request.encode())
+        webserver_socket.sendall(sendmsg.encode())
     except:
         send_403_response(client_socket)
         print("Failed to connect to WebServer")

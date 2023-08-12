@@ -84,7 +84,7 @@ def get_response_from_webserver(proxy_client_socket, client_socket):
     # Check for Transfer-Encoding: chunked
     response_data = headers
     print(response_data.decode())
-    if b"Transfer-Encoding: chunked" in headers:
+    if b"transfer-encoding: chunked" in headers.lower():
         response_data += handle_chunked_response(proxy_client_socket)
         return response_data
     
