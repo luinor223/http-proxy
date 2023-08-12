@@ -5,6 +5,7 @@ import time as pytime
 from configparser import ConfigParser
 from datetime import datetime, time 
 
+
 def read_config_file(filename):
     config = ConfigParser()
     config.read(filename)
@@ -24,9 +25,21 @@ def read_config_file(filename):
 
     return cache_time, whitelist, timelist, timeout, enabling_whitelist, time_restriction, max_recieve
 
-cache = {}
 file_path = 'config.ini'
 cache_time, whitelist, timelist, timeout, enabling_whitelist, time_restriction, max_recieve = read_config_file(file_path)
+cache = {}
+
+def clear_cache_periodically():
+    while True:
+        pytime.sleep(cache_time)  # Sleep for <cache_time> seconds     
+        cache.clear()
+        print("Cache cleaned!")
+        
+def is_cache_valid(url):
+    if url in cache:
+        print("response for ", url, "already in the cache.\n")    
+        return True
+    return False
 
 def process_request(request):
     first_line = request.split("\r\n")[0]
@@ -72,30 +85,43 @@ def is_in_whitelist(url):
             return True
     return False
 
-def time_check(time):
-    start = timelist[0]
-    end = timelist[1]
-    if start <= time <= end:
+def time_check(time1):
+    current_time = time(time1.hour, time1.minute, 0)
+    start = datetime.strptime(timelist[0], '%H:%M').time()
+    end = datetime.strptime(timelist[1], '%H:%M').time()
+    
+    print(start, current_time, end)
+    if start <= current_time <= end:
         return True
     return False    
 
-def proxy_create(client_socket, webserver, port, request): 
+
+def proxy_create(client_socket, webserver, port, request, url): 
     if enabling_whitelist:
         if not is_in_whitelist(webserver):
             send_403_response(client_socket)
             client_socket.close()
             return
     proxy_client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    
     try:
         proxy_client_socket.connect((webserver, port))
         proxy_client_socket.send(request.encode())
+        response = b""
         while 1:
             #Receive response from webserver
             message = proxy_client_socket.recv(max_recieve)
+            response = response + message
             #Send response to client
-            client_socket.send(message)
+            
             if len(message) <= max_recieve:
                 break
+        client_socket.send(response)
+        print("Adding response from request: ", url, "to cache\n")
+
+        cache[url]={
+            "cache": response,
+        }
         client_socket.close()
         proxy_client_socket.close()
     except:
@@ -114,18 +140,40 @@ def handle_client(client_socket, client_address):
     if method not in ["GET", "POST", "HEAD"]:
         send_403_response(client_socket)
         return
-    
+    if is_cache_valid(url):
+        print(f"[*] SENDING CACHED RESPONSE FOR: {url}\n")
+        client_socket.send(cache[url]["cache"])
+        client_socket.close()
+        return 
+    if time_restriction:
+        print(datetime.now().time())
+        if time_check(datetime.now().time()):
+            print("not in allowed time!")
+            send_403_response(client_socket)
+            return
     #Request to webserver
     print(f"Request from {client_address} : {method} {url}")
+<<<<<<< Updated upstream
     proxy_create(client_socket, webserver, port, request)
+=======
+    #ProxyClientSock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    
+    proxy_create(client_socket, webserver, port, request, url)
+>>>>>>> Stashed changes
     
     client_socket.close()
         
 
 def main():
+<<<<<<< Updated upstream
     # if len(sys.argv) <= 1:
     #     print('Usage : "python ProxyServer.py server_ip"\n[server_ip : It is the IP Address Of Proxy Server')
     #     sys.exit(2)
+=======
+    if len(sys.argv) <= 1:
+        print('Usage : "python ProxyServer.py server_ip"\n[server_ip : It is the IP Address Of Proxy Server')
+        sys.exit()
+>>>>>>> Stashed changes
 
     HOST = "127.0.0.1"
     Port = 8888
@@ -136,6 +184,9 @@ def main():
     tcpSerSock.bind((HOST, Port))
     tcpSerSock.listen(5)
     print(f'Server running on {HOST}:{Port}')
+
+    clear_cache_thread = threading.Thread(target=clear_cache_periodically)
+    clear_cache_thread.start()
 
     while True:
         tcpCliSock, addr = tcpSerSock.accept()
