@@ -10,42 +10,6 @@ import re
 
 cache_directory  = 'Cache'
 
-# def save_cache(webserver, response, client_socket):
-    # print("checking image for cache")
-    # web_server_folder = os.path.join(cache_directory, webserver)
-    # print("web server folder: ", web_server_folder)
-
-    # img_src_pattern = re.compile(r'<img[^>]+src="([^"]+)"', re.IGNORECASE)
-    # matches = img_src_pattern.findall(response)
-
-    # for img_src in matches:
-    #     print(img_src)
-    # if not os.path.exists(web_server_folder):
-    #     os.makedirs(web_server_folder)
-    #  #img src=
-    # content_type_header = re.search(r'Content-Type: (.+?)\r\n', response.decode('utf-8'))
-    # print("content_type_header: ", content_type_header)
-    # if content_type_header:
-    #     content_type = content_type_header.group(1)
-    #     print("content_type: ", content_type)
-    #     # Use regular expression to check if the content type is an image
-    #     image_content_types = re.compile(r'image/(jpeg|png|gif)')
-    #     is_image = image_content_types.match(content_type)
-
-    #     if is_image:
-    #         print("This is an image")
-    # # Extract the image file name from the URL (you might need more sophisticated logic)
-    #         image_url_pattern = r'<img [^>]*src=["\'](https?://[^"\']+\.jpg|https?://[^"\']+\.png|https?://[^"\']+\.gif)["\']'
-    #         image_urls = re.findall(image_url_pattern, response)
-    #         image_filename = image_urls[-1]
-
-    #     # Full path to save the image
-    #         image_path = os.path.join(web_server_folder, image_filename)
-
-    #     # Save the image content to the specified path
-    #         with open(image_path, 'wb') as image_file:
-    #             image_file.write(response.content)
-
 def proxy_image_response(client_socket, response_content):
     headers = b"HTTP/1.1 200 OK\r\nContent-Type: image/jpeg\r\n\r\n"
     
@@ -189,7 +153,7 @@ def get_response_from_webserver(proxy_client_socket, client_socket , url, method
     if b"transfer-encoding: chunked" in headers.lower():
         response += handle_chunked_response(proxy_client_socket)
         return response
-    
+
     # Process regular response with Content-Length
     content_length = 0
     for line in headers.split(b"\r\n"):
@@ -222,22 +186,21 @@ def get_image_data(response):
     return image_data
 
 def store_image_in_cache(url, image_data, webserver):
-    # web_server_folder = os.path.join(cache_directory, webserver)
-    # print("web server folder: ", web_server_folder)
-    # if not os.path.exists(web_server_folder):
-    #     os.makedirs(web_server_folder)
+    web_server_folder = os.path.join(cache_directory, webserver)
+    print("web server folder: ", web_server_folder)
+    if not os.path.exists(web_server_folder):
+        os.makedirs(web_server_folder)
 
-    # Create a directory for the cache if it doesn't exist
-    if not os.path.exists(cache_directory):
-        os.makedirs(cache_directory)
-    
     # Create a filename based on the URL
     filename = url.replace("/", "").replace(":", "")
-    
+    print("Filename: ", filename)
     # Save the image data to the cache directory
-    image_path = os.path.join(cache_directory, filename)
+    image_path = os.path.join(web_server_folder, filename)
     with open(image_path, 'wb') as f:
         f.write(image_data)
+
+    modification_time = os.path.getmtime(image_path)
+    print("modification_time: ", modification_time)
 
 def is_in_cache(url):
     return os.path.exists(os.path.join(cache_directory, url.replace("/", "").replace(":", "")))
@@ -299,16 +262,17 @@ def handle_client(client_socket, client_address):
     client_socket.send(response)
     print (f"Response sent to {client_address}\n\n")
     
-    #save_cache(webserver, response, client_socket)
-    # if "content-type: image" in response.lower():  # Adjust based on actual content type
-    #     print("There is an image")
-    #     proxy_image_response(client_socket, response)
     response_headers = response.split(b'\r\n\r\n')[0]
+    # print("response_headers: ", response_headers)
+
     # Check if the response is an image
-    if b"Content-Type: image/" in response_headers:
+    if b"content-type: image/" in response_headers.lower():
+        print("There is an image")
         image_data = get_image_data(response)
         if image_data:
-            store_image_in_cache(url, image_data)
+            print("storing image")
+            store_image_in_cache(url, image_data, webserver)
+
     webserver_socket.close()
     client_socket.close()
         
