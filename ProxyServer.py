@@ -4,6 +4,53 @@ import threading
 import time as pytime
 from configparser import ConfigParser
 from datetime import datetime, time 
+from pathlib import Path
+import os
+import re
+
+cache_directory  = 'Cache'
+
+# def save_cache(webserver, response, client_socket):
+    # print("checking image for cache")
+    # web_server_folder = os.path.join(cache_directory, webserver)
+    # print("web server folder: ", web_server_folder)
+
+    # img_src_pattern = re.compile(r'<img[^>]+src="([^"]+)"', re.IGNORECASE)
+    # matches = img_src_pattern.findall(response)
+
+    # for img_src in matches:
+    #     print(img_src)
+    # if not os.path.exists(web_server_folder):
+    #     os.makedirs(web_server_folder)
+    #  #img src=
+    # content_type_header = re.search(r'Content-Type: (.+?)\r\n', response.decode('utf-8'))
+    # print("content_type_header: ", content_type_header)
+    # if content_type_header:
+    #     content_type = content_type_header.group(1)
+    #     print("content_type: ", content_type)
+    #     # Use regular expression to check if the content type is an image
+    #     image_content_types = re.compile(r'image/(jpeg|png|gif)')
+    #     is_image = image_content_types.match(content_type)
+
+    #     if is_image:
+    #         print("This is an image")
+    # # Extract the image file name from the URL (you might need more sophisticated logic)
+    #         image_url_pattern = r'<img [^>]*src=["\'](https?://[^"\']+\.jpg|https?://[^"\']+\.png|https?://[^"\']+\.gif)["\']'
+    #         image_urls = re.findall(image_url_pattern, response)
+    #         image_filename = image_urls[-1]
+
+    #     # Full path to save the image
+    #         image_path = os.path.join(web_server_folder, image_filename)
+
+    #     # Save the image content to the specified path
+    #         with open(image_path, 'wb') as image_file:
+    #             image_file.write(response.content)
+
+def proxy_image_response(client_socket, response_content):
+    headers = b"HTTP/1.1 200 OK\r\nContent-Type: image/jpeg\r\n\r\n"
+    
+    client_socket.send(headers + response_content)
+    client_socket.close()
 
 def read_config_file(filename):
     config = ConfigParser()
@@ -134,11 +181,11 @@ def get_response_from_webserver(proxy_client_socket, client_socket , url, method
     
     # Check for Transfer-Encoding: chunked
     response = headers
-    print(response.decode())
+    #print(response.decode())
     if method == "HEAD":
         return response
     
-    print(response.decode())
+    #print(response.decode())
     if b"transfer-encoding: chunked" in headers.lower():
         response += handle_chunked_response(proxy_client_socket)
         return response
@@ -168,9 +215,43 @@ def get_response_from_webserver(proxy_client_socket, client_socket , url, method
 
     return response
 
+def get_image_data(response):
+    # Parse the response to extract image data
+    image_start = response.find(b'\r\n\r\n') + 4
+    image_data = response[image_start:]
+    return image_data
+
+def store_image_in_cache(url, image_data, webserver):
+    # web_server_folder = os.path.join(cache_directory, webserver)
+    # print("web server folder: ", web_server_folder)
+    # if not os.path.exists(web_server_folder):
+    #     os.makedirs(web_server_folder)
+
+    # Create a directory for the cache if it doesn't exist
+    if not os.path.exists(cache_directory):
+        os.makedirs(cache_directory)
+    
+    # Create a filename based on the URL
+    filename = url.replace("/", "").replace(":", "")
+    
+    # Save the image data to the cache directory
+    image_path = os.path.join(cache_directory, filename)
+    with open(image_path, 'wb') as f:
+        f.write(image_data)
+
+def is_in_cache(url):
+    return os.path.exists(os.path.join(cache_directory, url.replace("/", "").replace(":", "")))
+
+def get_cached_response(url):
+    image_path = os.path.join(cache_directory, url.replace("/", "").replace(":", ""))
+    with open(image_path, 'rb') as f:
+        return f.read()
+
 def handle_client(client_socket, client_address):
     #Receive request from Client
     request = client_socket.recv(max_recieve).decode()
+    if request == "":
+        return
     method, url, webserver, port = process_request(request)
     
     #Check method
@@ -188,19 +269,20 @@ def handle_client(client_socket, client_address):
         client_socket.close()
         return 
     if time_restriction:
-        print(datetime.now().time())
-        if time_check(datetime.now().time()):
+        if time_check(datetime.now().time()) == False:
             print("not in allowed time!")
             send_403_response(client_socket)
             return
     #Request to webserver (create a socket as client)
     print(f"[NEW] Request from {client_address} : {method} {url}")
-    print(request)
+    print("REQUEST: ", request)
+    
     print("------------------------------------------")
     webserver_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     webserver_socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
     sendmsg = f"{method} {url} HTTP/1.1\r\n" + f"Host: {webserver}\r\n" + f"Connection: Keep-Alive\r\n\r\n"
     print(sendmsg.encode())
+    
     try:
         webserver_socket.connect((webserver, port))
         webserver_socket.sendall(sendmsg.encode())
@@ -212,10 +294,21 @@ def handle_client(client_socket, client_address):
         return
     
     response = get_response_from_webserver(webserver_socket, client_socket, url, method)
+    print("NEXT IS A RESPONSE TO CLIENT: \n")
     print(response)
     client_socket.send(response)
     print (f"Response sent to {client_address}\n\n")
     
+    #save_cache(webserver, response, client_socket)
+    # if "content-type: image" in response.lower():  # Adjust based on actual content type
+    #     print("There is an image")
+    #     proxy_image_response(client_socket, response)
+    response_headers = response.split(b'\r\n\r\n')[0]
+    # Check if the response is an image
+    if b"Content-Type: image/" in response_headers:
+        image_data = get_image_data(response)
+        if image_data:
+            store_image_in_cache(url, image_data)
     webserver_socket.close()
     client_socket.close()
         
