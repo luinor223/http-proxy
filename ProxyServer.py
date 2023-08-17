@@ -9,7 +9,7 @@ import os
 import re
 
 cache_directory  = 'Cache'
-
+supported_image = ["png", "jpg", "ico", "gif", "jpeg", "jfif"]
 def read_config_file(filename):
     config = ConfigParser()
     config.read(filename)
@@ -180,7 +180,18 @@ def store_image_in_cache(url, image_data, webserver):
 def is_in_cache(webserver, filename):
     FilePath =  os.path.join(cache_directory, webserver, filename)
     print("File Path: ", FilePath)
-    return os.path.exists(os.path.join(cache_directory, webserver, filename))
+    if os.path.exists(FilePath):
+        modification_time = os.path.getmtime(file_path)
+        print("modification_time: ", modification_time)
+        current_time = pytime.time()
+        print("current_time: ", current_time)
+        print("Time diff: ", current_time - modification_time)
+        if current_time - modification_time < cache_time:
+            return 1   #cache still valid
+        else:
+            return 2   #cache invalid
+    else:
+        return 0
 
 def get_cached_response(url, webserver, filename):
     image_path = os.path.join(cache_directory, webserver, filename)
@@ -215,12 +226,36 @@ def handle_client(client_socket, client_address):
     #Request to webserver (create a socket as client)
     print(f"[NEW] Request from {client_address} : {method} {url}")
     print("REQUEST: ", request)
-    
     print("------------------------------------------")
+
+    has_image = False
+    if "accept: image/" in request.lower():
+        print("There is an image in request")
+        has_image = True
+        filename = os.path.basename(url)
+        # file_extension = filename.split('.')[-1]
+        # print("file_extension: ", file_extension)
+        # if supported_image not in file_extension:
+        #     print("NOT A IMAGE FILE")
+        #     return
+        status = is_in_cache(webserver, filename)
+        if status == 1:
+            print("[Image already in Cache, sending cache response]")
+            cache_response = get_cached_response(url, webserver, filename)
+            print("Cache Responsed!")
+            client_socket.send(cache_response)
+
+            client_socket.close()
+            return
+        elif status == 2:
+            print("[Image already in Cache but invalid]")
+        elif status == 0:
+            print("[Image not in cache]")
+        
     webserver_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     webserver_socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
     sendmsg = f"{method} {url} HTTP/1.1\r\n" + f"Host: {webserver}\r\n" + f"Connection: Keep-Alive\r\n\r\n"
-    print(sendmsg.encode())
+    print("Send MSG: ", sendmsg.encode())
     
     try:
         webserver_socket.connect((webserver, port))
@@ -231,32 +266,16 @@ def handle_client(client_socket, client_address):
         webserver_socket.close()
         client_socket.close()
         return
+ 
     
     response = get_response_from_webserver(webserver_socket, client_socket, url, method)
     response_headers = response.split(b'\r\n\r\n')[0]
-    # Check if the response is an image
-    if b"content-type: image/" in response_headers.lower():
-        print("There is an image")
+
+    if has_image:
+        print("storing image")
         image_data = get_image_data(response)
-        print("image_data: ", image_data)
-        
-        if image_data: 
-            filename = os.path.basename(url)
-            if (is_in_cache(webserver, filename)):
-                print("Image already in Cache, sending cache response")
-                cache_response = get_cached_response(url, webserver, filename)
-                print("Cache Response: ", cache_response)
-                client_socket.send(cache_response)
-
-                client_socket.close()
-                webserver_socket.close()
-                return
-            else:
-                print("storing image")
-                store_image_in_cache(url, image_data, webserver)
-
-
-    print("NEXT IS A RESPONSE TO CLIENT: \n")
+        store_image_in_cache(url, image_data, webserver)
+    #print("NEXT IS A RESPONSE TO CLIENT: \n")
     #print(response)
     client_socket.send(response)
     print (f"Response sent to {client_address}\n\n")
