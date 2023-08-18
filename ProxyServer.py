@@ -152,7 +152,7 @@ def get_response_from_webserver(proxy_client_socket, client_socket , method):
         return response
     
     #print(response.decode())
-    if b"transfer-encoding: chunked" in headers.lower():
+    if b"transfer-encoding" in headers.lower() and b"chunked" in headers.lower():
         response += handle_chunked_response(proxy_client_socket)
         return response
 

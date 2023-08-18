@@ -131,7 +131,7 @@ def get_response_from_webserver(proxy_client_socket, client_socket , url, method
         return response
     
     #print(response.decode())
-    if b"transfer-encoding: chunked" in headers.lower():
+    if b"transfer-encoding" in headers.lower() and b"chunked" in headers.lower():
         response += handle_chunked_response(proxy_client_socket)
         return response
 
@@ -224,7 +224,11 @@ def handle_client(client_socket, client_address):
             return
     #Request to webserver (create a socket as client)
     print(f"[NEW] Request from {client_address} : {method} {url}")
-    #print("REQUEST: ", request)
+    print("NOT DECODED REQUEST: \n", request)
+    try:
+        print("DECODED REQUEST: \n", request.decode())
+    except:
+        print("DECODED REQUEST: \n", request.decode("ISO-8859-1"))
     print("------------------------------------------")
 
     has_image = False
@@ -268,6 +272,11 @@ def handle_client(client_socket, client_address):
  
     
     response = get_response_from_webserver(webserver_socket, client_socket, url, method)
+    print ("NOT DECODED RESPONSE: \n", response)
+    try:
+        print ("DECODED RESPONSE: \n", response.decode())
+    except:
+        print ("DECODED RESPONSE: \n", response.decode("ISO-8859-1"))
 
     if has_image:
         print("storing image")
