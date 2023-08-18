@@ -9,7 +9,8 @@ import os
 import re
 
 cache_directory  = 'Cache'
-supported_image = ["png", "jpg", "ico", "gif", "jpeg", "jfif"]
+supported_image = [".png", ".jpg", ".ico", ".gif", ".jpeg", ".jfif"]
+
 def read_config_file(filename):
     config = ConfigParser()
     config.read(filename)
@@ -143,7 +144,7 @@ def get_response_from_webserver(proxy_client_socket, client_socket , url, method
             content_length = int(line.split(b":")[1].strip())
             break
     
-    print(content_length)
+    #print(content_length)
     remaining_length = content_length
     while remaining_length > 0:
         chunk_size = min(remaining_length, 4096)
@@ -162,30 +163,31 @@ def get_image_data(response):
 
 def store_image_in_cache(url, image_data, webserver):
     web_server_folder = os.path.join(cache_directory, webserver)
-    print("web server folder: ", web_server_folder)
+    #print("web server folder: ", web_server_folder)
     if not os.path.exists(web_server_folder):
         os.makedirs(web_server_folder)
 
     # Create a filename based on the URL
     filename = os.path.basename(url)
-    print("Filename: ", filename)
+    #print("Filename: ", filename)
     # Save the image data to the cache directory
     image_path = os.path.join(web_server_folder, filename)
+    print("Saving [", filename, "] in: ", web_server_folder)
     with open(image_path, 'wb') as f:
         f.write(image_data)
 
-    modification_time = os.path.getmtime(image_path)
-    print("modification_time: ", modification_time)
+    #modification_time = os.path.getmtime(image_path)
+    #print("modification_time: ", modification_time)
 
-def is_in_cache(webserver, filename):
+def cache_check(webserver, filename):
     FilePath =  os.path.join(cache_directory, webserver, filename)
-    print("File Path: ", FilePath)
+    #print("File Path: ", FilePath)
     if os.path.exists(FilePath):
-        modification_time = os.path.getmtime(file_path)
-        print("modification_time: ", modification_time)
+        modification_time = os.path.getmtime(FilePath)
+        #print("modification_time: ", modification_time)
         current_time = pytime.time()
-        print("current_time: ", current_time)
-        print("Time diff: ", current_time - modification_time)
+        #print("current_time: ", current_time)
+        #print("Time diff: ", current_time - modification_time)
         if current_time - modification_time < cache_time:
             return 1   #cache still valid
         else:
@@ -202,6 +204,12 @@ def get_cached_response(url, webserver, filename):
     with open(image_path, 'rb') as f:
         return header.encode() + f.read()
 
+def image_check(request, filename):
+    if "accept: image/" in request.lower() or supported_image in filename.lower():
+        print("There is an image in request")
+        return True
+    return False
+ 
 def handle_client(client_socket, client_address):
     #Receive request from Client
     request = client_socket.recv(max_recieve).decode()
@@ -215,47 +223,45 @@ def handle_client(client_socket, client_address):
         return
     if enabling_whitelist:
         if not is_in_whitelist(webserver):
+            print("> ", webserver, " not in whitelist")
             send_403_response(client_socket)
             client_socket.close()
             return
     if time_restriction:
         if time_check(datetime.now().time()) == False:
-            print("not in allowed time!")
-            send_403_response(client_socket)
+            print("> Request not in allowed time")
+            send_403_response(client_socket)        
+            client_socket.close()
             return
     #Request to webserver (create a socket as client)
     print(f"[NEW] Request from {client_address} : {method} {url}")
-    print("REQUEST: ", request)
-    print("------------------------------------------")
+    #print("REQUEST: ", request)
+    #print("------------------------------------------")
+
+
 
     has_image = False
-    if "accept: image/" in request.lower():
-        print("There is an image in request")
+    filename = os.path.basename(url)
+    if image_check(request, filename):
         has_image = True
-        filename = os.path.basename(url)
-        # file_extension = filename.split('.')[-1]
-        # print("file_extension: ", file_extension)
-        # if supported_image not in file_extension:
-        #     print("NOT A IMAGE FILE")
-        #     return
-        status = is_in_cache(webserver, filename)
+        status = cache_check(webserver, filename)
         if status == 1:
-            print("[Image already in Cache, sending cache response]")
+            print("   > Image already in Cache, sending cache response")
             cache_response = get_cached_response(url, webserver, filename)
-            print("Cache Responsed!")
+            #print("Cache Responsed!")
             client_socket.send(cache_response)
 
             client_socket.close()
             return
         elif status == 2:
-            print("[Image already in Cache but invalid]")
+            print("   > Image already in Cache but invalid")
         elif status == 0:
-            print("[Image not in cache]")
+            print("   > Image not in Cache")
         
     webserver_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     webserver_socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
     sendmsg = f"{method} {url} HTTP/1.1\r\n" + f"Host: {webserver}\r\n" + f"Connection: Keep-Alive\r\n\r\n"
-    print("Send MSG: ", sendmsg.encode())
+    #print("Send MSG: ", sendmsg.encode())
     
     try:
         webserver_socket.connect((webserver, port))
@@ -272,7 +278,7 @@ def handle_client(client_socket, client_address):
     response_headers = response.split(b'\r\n\r\n')[0]
 
     if has_image:
-        print("storing image")
+        print("Storing/Updating image...")
         image_data = get_image_data(response)
         store_image_in_cache(url, image_data, webserver)
     #print("NEXT IS A RESPONSE TO CLIENT: \n")
@@ -289,13 +295,13 @@ def handle_client(client_socket, client_address):
         
 
 def main():
-    # if len(sys.argv) <= 1:
-    #     print('Usage : "python ProxyServer.py server_ip"\n[server_ip : It is the IP Address Of Proxy Server')
-    #     sys.exit(2)
+    if len(sys.argv) <= 2:
+        print('Usage : "python ProxyServer.py server_ip port"\n[server_ip : It is the IP Address Of Proxy Server]\n[port: Port for Proxy Server]')
+        sys.exit()
 
-    HOST = "127.0.0.1"
-    # HOST = sys.argv[1]
-    Port = 8888
+    #HOST = "127.0.0.1"
+    HOST = sys.argv[1]
+    Port = int(sys.argv[2])
 
     tcpSerSock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     tcpSerSock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
