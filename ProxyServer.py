@@ -31,7 +31,6 @@ def read_config_file(filename):
 
 file_path = 'config.ini'
 cache_time, whitelist, timelist, timeout, enabling_whitelist, time_restriction, max_recieve, supported_image = read_config_file(file_path)
-print(supported_image)
 cache = {}
        
 def process_request(request):
