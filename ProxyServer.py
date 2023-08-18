@@ -4,12 +4,9 @@ import threading
 import time as pytime
 from configparser import ConfigParser
 from datetime import datetime, time 
-from pathlib import Path
 import os
-import re
 
 cache_directory  = 'Cache'
-supported_image = [".png", ".jpg", ".ico", ".gif", ".jpeg", ".jfif"]
 
 def read_config_file(filename):
     config = ConfigParser()
@@ -23,21 +20,24 @@ def read_config_file(filename):
     enabling_whitelist = config.getboolean('default', 'enabling_whitelist')
     time_restriction = config.getboolean('default', 'time_restriction')
     max_recieve = config.getint('default', 'max_recieve')
-
+    supported_image = config.get('default', 'supported_image')
+    
+    supported_image = [item.strip() for item in supported_image.split(',')]
     # Process the whitelisting string into a list
     whitelist = [item.strip() for item in whitelisting.split(',')]
     timelist = [timeline.strip() for timeline in time.split('-')]
 
-    return cache_time, whitelist, timelist, timeout, enabling_whitelist, time_restriction, max_recieve
+    return cache_time, whitelist, timelist, timeout, enabling_whitelist, time_restriction, max_recieve, supported_image
 
 file_path = 'config.ini'
-cache_time, whitelist, timelist, timeout, enabling_whitelist, time_restriction, max_recieve = read_config_file(file_path)
+cache_time, whitelist, timelist, timeout, enabling_whitelist, time_restriction, max_recieve, supported_image = read_config_file(file_path)
+print(supported_image)
 cache = {}
        
 def process_request(request):
-    first_line = request.split("\r\n")[0]
-    method = first_line.split(" ")[0]
-    url = first_line.split(" ")[1]
+    first_line = request.split(b"\r\n")[0]
+    method = first_line.split(b" ")[0].decode()
+    url = first_line.split(b" ")[1].decode()
     http_pos = url.find("://") # find pos of ://
     if (http_pos==-1):
         temp = url
@@ -63,6 +63,25 @@ def process_request(request):
         webserver = temp[:port_pos]
     
     return method, url, webserver, port
+
+def modify_header(header):
+    # Split the header into lines
+    lines = header.split(b'\r\n')
+
+    # Find the Connection header (if it exists)
+    for i in range(len(lines)):
+        if lines[i].lower().startswith(b'connection:'):
+            # Change Close to Keep-Alive
+            lines[i] = b'Connection: Keep-Alive'
+            break
+    else:
+        # If Connection header doesn't exist, add it
+        lines.append(b'Connection: Keep-Alive')
+
+    # Join the lines back into a modified header
+    modified_header = b'\r\n'.join(lines)
+
+    return modified_header
 
 def send_403_response(client_socket):
     header = "HTTP/1.1 403 Forbidden\r\n"
@@ -113,7 +132,7 @@ def handle_chunked_response(webserver_socket):
 
     return response
 
-def get_response_from_webserver(proxy_client_socket, client_socket , url, method):
+def get_response_from_webserver(proxy_client_socket, client_socket , method):
     # Read and process headers
     headers = b""
     while True:
@@ -144,7 +163,6 @@ def get_response_from_webserver(proxy_client_socket, client_socket , url, method
             content_length = int(line.split(b":")[1].strip())
             break
     
-    #print(content_length)
     remaining_length = content_length
     while remaining_length > 0:
         chunk_size = min(remaining_length, 4096)
@@ -163,31 +181,22 @@ def get_image_data(response):
 
 def store_image_in_cache(url, image_data, webserver):
     web_server_folder = os.path.join(cache_directory, webserver)
-    #print("web server folder: ", web_server_folder)
+
     if not os.path.exists(web_server_folder):
         os.makedirs(web_server_folder)
 
-    # Create a filename based on the URL
-    filename = os.path.basename(url)
-    #print("Filename: ", filename)
-    # Save the image data to the cache directory
+    filename = os.path.basename(url).split('?')[0]
     image_path = os.path.join(web_server_folder, filename)
     print("Saving [", filename, "] in: ", web_server_folder)
     with open(image_path, 'wb') as f:
         f.write(image_data)
-
-    #modification_time = os.path.getmtime(image_path)
-    #print("modification_time: ", modification_time)
 
 def cache_check(webserver, filename):
     FilePath =  os.path.join(cache_directory, webserver, filename)
     #print("File Path: ", FilePath)
     if os.path.exists(FilePath):
         modification_time = os.path.getmtime(FilePath)
-        #print("modification_time: ", modification_time)
         current_time = pytime.time()
-        #print("current_time: ", current_time)
-        #print("Time diff: ", current_time - modification_time)
         if current_time - modification_time < cache_time:
             return 1   #cache still valid
         else:
@@ -195,7 +204,7 @@ def cache_check(webserver, filename):
     else:
         return 0
 
-def get_cached_response(url, webserver, filename):
+def get_cached_response(webserver, filename):
     image_path = os.path.join(cache_directory, webserver, filename)
     header = "HTTP/1.1 200 OK\r\n"
     file_extension = filename.split('.')[-1]
@@ -205,15 +214,15 @@ def get_cached_response(url, webserver, filename):
         return header.encode() + f.read()
 
 def image_check(request, filename):
-    if "accept: image/" in request.lower() or supported_image in filename.lower():
+    if b"accept: image/" in request.lower() or any(image_extension in filename.lower() for image_extension in supported_image):
         print("There is an image in request")
         return True
     return False
  
 def handle_client(client_socket, client_address):
     #Receive request from Client
-    request = client_socket.recv(max_recieve).decode()
-    if request == "":
+    request = client_socket.recv(max_recieve)
+    if request == b"":
         return
     method, url, webserver, port = process_request(request)
     
@@ -235,19 +244,15 @@ def handle_client(client_socket, client_address):
             return
     #Request to webserver (create a socket as client)
     print(f"[NEW] Request from {client_address} : {method} {url}")
-    #print("REQUEST: ", request)
-    #print("------------------------------------------")
-
-
 
     has_image = False
-    filename = os.path.basename(url)
+    filename = os.path.basename(url).split('?')[0]
     if image_check(request, filename):
         has_image = True
         status = cache_check(webserver, filename)
         if status == 1:
             print("   > Image already in Cache, sending cache response")
-            cache_response = get_cached_response(url, webserver, filename)
+            cache_response = get_cached_response(webserver, filename)
             #print("Cache Responsed!")
             client_socket.send(cache_response)
 
@@ -260,12 +265,14 @@ def handle_client(client_socket, client_address):
         
     webserver_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     webserver_socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
-    sendmsg = f"{method} {url} HTTP/1.1\r\n" + f"Host: {webserver}\r\n" + f"Connection: Keep-Alive\r\n\r\n"
-    #print("Send MSG: ", sendmsg.encode())
+    
+    #Change connection to keep-alive
+    request_header = modify_header(request.split(b"\r\n\r\n")[0])
+    sendmsg = request_header + b"\r\n\r\n" + request.split(b"\r\n\r\n")[1]
     
     try:
         webserver_socket.connect((webserver, port))
-        webserver_socket.sendall(sendmsg.encode())
+        webserver_socket.sendall(sendmsg)
     except:
         send_403_response(client_socket)
         print("Failed to connect to WebServer")
@@ -274,21 +281,15 @@ def handle_client(client_socket, client_address):
         return
  
     
-    response = get_response_from_webserver(webserver_socket, client_socket, url, method)
-    response_headers = response.split(b'\r\n\r\n')[0]
+    response = get_response_from_webserver(webserver_socket, client_socket, method)
 
     if has_image:
         print("Storing/Updating image...")
         image_data = get_image_data(response)
         store_image_in_cache(url, image_data, webserver)
-    #print("NEXT IS A RESPONSE TO CLIENT: \n")
-    #print(response)
+
     client_socket.send(response)
     print (f"Response sent to {client_address}\n\n")
-    
-    
-    # print("response_headers: ", response_headers)
-
     
     webserver_socket.close()
     client_socket.close()
@@ -299,7 +300,6 @@ def main():
         print('Usage : "python ProxyServer.py server_ip port"\n[server_ip : It is the IP Address Of Proxy Server]\n[port: Port for Proxy Server]')
         sys.exit()
 
-    #HOST = "127.0.0.1"
     HOST = sys.argv[1]
     Port = int(sys.argv[2])
 

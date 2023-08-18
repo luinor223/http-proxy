@@ -4,7 +4,11 @@ import threading
 import time as pytime
 from configparser import ConfigParser
 from datetime import datetime, time 
+#from pathlib import Path
+import os
 
+cache_directory  = 'Cache'
+supported_image = ["png", "jpg", "ico", "gif", "jpeg", "jfif"]
 def read_config_file(filename):
     config = ConfigParser()
     config.read(filename)
@@ -24,22 +28,10 @@ def read_config_file(filename):
 
     return cache_time, whitelist, timelist, timeout, enabling_whitelist, time_restriction, max_recieve
 
-file_path = 'config.ini'
-cache_time, whitelist, timelist, timeout, enabling_whitelist, time_restriction, max_receive = read_config_file(file_path)
+config_file_path = 'config.ini'
+cache_time, whitelist, timelist, timeout, enabling_whitelist, time_restriction, max_recieve = read_config_file(config_file_path)
 cache = {}
-
-def clear_cache_periodically():
-    while True:
-        pytime.sleep(cache_time)  # Sleep for <cache_time> seconds     
-        cache.clear()
-        print("Cache cleaned!")
-        
-def is_cache_valid(url):
-    if url in cache:
-        print("response for ", url, "already in the cache.\n")    
-        return True
-    return False
-
+       
 def process_request(request):
     first_line = request.split(b"\r\n")[0]
     method = first_line.split(b" ")[0].decode()
@@ -107,7 +99,7 @@ def handle_chunked_response(webserver_socket):
         chunk_data = b""
         remaining_length = chunk_size
         while remaining_length > 0:
-            msg = webserver_socket.recv(min(remaining_length, max_receive))
+            msg = webserver_socket.recv(min(remaining_length, max_recieve))
             chunk_data += msg
             remaining_length -= len(msg)
         
@@ -115,7 +107,6 @@ def handle_chunked_response(webserver_socket):
         
         if chunk_size == 2:
             # Last chunk, end of response
-            print(response)
             break
 
     return response
@@ -135,21 +126,23 @@ def get_response_from_webserver(proxy_client_socket, client_socket , url, method
     
     # Check for Transfer-Encoding: chunked
     response = headers
-    print("Sending response from request: ", method, url, "\n", headers.decode())
+    #print(response.decode())
     if method == "HEAD":
         return response
     
+    #print(response.decode())
     if b"transfer-encoding: chunked" in headers.lower():
         response += handle_chunked_response(proxy_client_socket)
         return response
-    
+
     # Process regular response with Content-Length
     content_length = 0
     for line in headers.split(b"\r\n"):
         if line.lower().startswith(b"content-length:"):
             content_length = int(line.split(b":")[1].strip())
             break
-
+    
+    print(content_length)
     remaining_length = content_length
     while remaining_length > 0:
         chunk_size = min(remaining_length, 4096)
@@ -157,21 +150,61 @@ def get_response_from_webserver(proxy_client_socket, client_socket , url, method
         response += msg
         
         remaining_length -= len(msg)
-        
-    print("Adding response from request: ", url, "to cache\n")
-
-    cache[url]={
-        "cache": response,
-        "last_update_time": pytime.time()
-    }
 
     return response
 
+def get_image_data(response):
+    # Parse the response to extract image data
+    image_start = response.find(b'\r\n\r\n') + 4
+    image_data = response[image_start:]
+    return image_data
+
+def store_image_in_cache(url, image_data, webserver):
+    web_server_folder = os.path.join(cache_directory, webserver)
+    print("web server folder: ", web_server_folder)
+    if not os.path.exists(web_server_folder):
+        os.makedirs(web_server_folder)
+
+    # Create a filename based on the URL
+    filename = os.path.basename(url)
+    print("Filename: ", filename)
+    # Save the image data to the cache directory
+    image_path = os.path.join(web_server_folder, filename)
+    with open(image_path, 'wb') as f:
+        f.write(image_data)
+
+    modification_time = os.path.getmtime(image_path)
+    print("modification_time: ", modification_time)
+
+def is_in_cache(webserver, filename):
+    CacheFilePath =  os.path.join(cache_directory, webserver, filename)
+    print("File Path: ", CacheFilePath)
+    if os.path.exists(CacheFilePath):
+        modification_time = os.path.getmtime(CacheFilePath)
+        print("modification_time: ", modification_time, " ", CacheFilePath)
+        current_time = pytime.time()
+        print("current_time: ", current_time)
+        print("Time diff: ", current_time - modification_time)
+        if current_time - modification_time < cache_time:
+            return 1   #cache still valid
+        else:
+            return 2   #cache invalid
+    else:
+        return 0
+
+def get_cached_response(url, webserver, filename):
+    image_path = os.path.join(cache_directory, webserver, filename)
+    header = "HTTP/1.1 200 OK\r\n"
+    file_extension = filename.split('.')[-1]
+    header += f"Content-Type: image/{file_extension}\r\n\r\n"
+    print("HEADER: ", header)
+    with open(image_path, 'rb') as f:
+        return header.encode() + f.read()
+
 def handle_client(client_socket, client_address):
     #Receive request from Client
-    request = client_socket.recv(max_receive)
+    request = client_socket.recv(max_recieve)
     if request == b"":
-        print("Request is empty!")
         return
     method, url, webserver, port = process_request(request)
     
@@ -184,21 +217,45 @@ def handle_client(client_socket, client_address):
             send_403_response(client_socket)
             client_socket.close()
             return
-    if is_cache_valid(url):
-        print(f"[*] SENDING CACHED RESPONSE FOR: {url}\n")
-        client_socket.send(cache[url]["cache"])
-        client_socket.close()
-        return 
     if time_restriction:
-        print(datetime.now().time())
-        if not time_check(datetime.now().time()):
+        if time_check(datetime.now().time()) == False:
             print("not in allowed time!")
             send_403_response(client_socket)
             return
     #Request to webserver (create a socket as client)
+    print(f"[NEW] Request from {client_address} : {method} {url}")
+    #print("REQUEST: ", request)
+    print("------------------------------------------")
+
+    has_image = False
+    if b"accept: image/" in request.lower():
+        print("There is an image in request")
+        has_image = True
+        filename = os.path.basename(url)
+        # file_extension = filename.split('.')[-1]
+        # print("file_extension: ", file_extension)
+        # if supported_image not in file_extension:
+        #     print("NOT A IMAGE FILE")
+        #     return
+        status = is_in_cache(webserver, filename)
+        if status == 1:
+            print("[Image already in Cache, sending cache response]")
+            cache_response = get_cached_response(url, webserver, filename)
+            print("Cache Responsed!")
+            client_socket.send(cache_response)
+
+            client_socket.close()
+            return
+        elif status == 2:
+            print("[Image already in Cache but invalid]")
+        elif status == 0:
+            print("[Image not in cache]")
+        
     webserver_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     webserver_socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
     sendmsg = f"{method} {url} HTTP/1.1\r\n" + f"Host: {webserver}\r\n" + f"Connection: Keep-Alive\r\n\r\n"
+    print("Send MSG: ", sendmsg.encode())
+    
     try:
         webserver_socket.connect((webserver, port))
         webserver_socket.sendall(request)
@@ -208,13 +265,22 @@ def handle_client(client_socket, client_address):
         webserver_socket.close()
         client_socket.close()
         return
+ 
     
-    print(f"[NEW] Request from {client_address} : {method} {url}")
-    print(request.decode())
-    print("------------------------------------------")
     response = get_response_from_webserver(webserver_socket, client_socket, url, method)
+
+    if has_image:
+        print("storing image")
+        image_data = get_image_data(response)
+        store_image_in_cache(url, image_data, webserver)
+    #print("NEXT IS A RESPONSE TO CLIENT: \n")
+    #print(response)
     client_socket.send(response)
     print (f"Response sent to {client_address}\n\n")
+    
+    
+    # print("response_headers: ", response_headers)
+
     
     webserver_socket.close()
     client_socket.close()
@@ -235,9 +301,6 @@ def main():
     tcpSerSock.bind((HOST, Port))
     tcpSerSock.listen(5)
     print(f'Server running on {HOST}:{Port}')
-
-    clear_cache_thread = threading.Thread(target=clear_cache_periodically)
-    clear_cache_thread.start()
 
     while True:
         tcpCliSock, addr = tcpSerSock.accept()

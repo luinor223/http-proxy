@@ -1,0 +1,496 @@
+1EA8
+<!DOCTYPE html>
+<!--[if IEMobile 7]><html class="iem7"  lang="vi" dir="ltr"><![endif]-->
+<!--[if lte IE 6]><html class="lt-ie9 lt-ie8 lt-ie7"  lang="vi" dir="ltr"><![endif]-->
+<!--[if (IE 7)&(!IEMobile)]><html class="lt-ie9 lt-ie8"  lang="vi" dir="ltr"><![endif]-->
+<!--[if IE 8]><html class="lt-ie9"  lang="vi" dir="ltr"><![endif]-->
+<!--[if (gte IE 9)|(gt IEMobile 7)]><!--><html  lang="vi" dir="ltr" prefix="fb: http://www.facebook.com/2008/fbml content: http://purl.org/rss/1.0/modules/content/ dc: http://purl.org/dc/terms/ foaf: http://xmlns.com/foaf/0.1/ og: http://ogp.me/ns# rdfs: http://www.w3.org/2000/01/rdf-schema# sioc: http://rdfs.org/sioc/ns# sioct: http://rdfs.org/sioc/types# skos: http://www.w3.org/2004/02/skos/core# xsd: http://www.w3.org/2001/XMLSchema#"><!--<![endif]-->
+
+<head>
+  <!--[if IE]><![endif]-->
+<link rel="dns-prefetch" href="//static.ak.fbcdn.net" />
+<link rel="dns-prefetch" href="//themes.googleusercontent.com" />
+<link rel="dns-prefetch" href="//cdn.arduino.vn" />
+<link rel="dns-prefetch" href="//languages" />
+<meta charset="utf-8" />
+<meta http-equiv="x-dns-prefetch-control" content="on" />
+<link rel="dns-prefetch" href="//cdn.arduino.vn" />
+<!--[if IE 9]>
+<link rel="prefetch" href="//cdn.arduino.vn" />
+<![endif]-->
+<meta name="Generator" content="Drupal 7 (http://drupal.org)" />
+<script src="https://www.google.com/recaptcha/api.js?hl=vi" async="async" defer="defer"></script>
+<link rel="shortcut icon" href="//cdn.arduino.vn/sites/all/themes/arduino2016/favicon.ico" type="image/vnd.microsoft.icon" />
+  <title>Không tìm thấy trang | Cộng đồng Arduino Việt Nam</title>
+
+      <meta name="MobileOptimized" content="width">
+    <meta name="HandheldFriendly" content="true">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0"/>
+    <meta http-equiv="cleartype" content="on">
+
+  <link type="text/css" rel="stylesheet" href="//cdn.arduino.vn/sites/default/files/advagg_css/css__hzKMQe9u4m4CRO0ncY83S-TdsNqTTgw-15hiYoS1Jjs__U6jMuHoTkPqkUQTg4pH3Ue33qiBg4Jn4cVUYcxYZpj8__NOesQBci7aUJhboX9mdIi6Jf56R3z92ZfrlxWvCiWe0.css" media="all" />
+  <script src="//cdn.arduino.vn/sites/default/files/advagg_js/js__q4ZluDEr7yHOp8TDo4l-cypOrRNOvxyaxrSrBudwQ2E__LOGJbIpGkynalCSfcR1h34ImWYBGTa_dPChPTpArKqg__NOesQBci7aUJhboX9mdIi6Jf56R3z92ZfrlxWvCiWe0.js"></script>
+<script src="//cdn.arduino.vn/sites/default/files/advagg_js/js__nok8G7hcnetIw76kyOWGSjfV7ZbfyfFwm807kxsEXGI__BaEwjj6wscfXL9ZDWHeXT4eowghF20sqLavOStFRjgc__NOesQBci7aUJhboX9mdIi6Jf56R3z92ZfrlxWvCiWe0.js" defer="defer"></script>
+<script src="//cdn.arduino.vn/sites/default/files/advagg_js/js__xGEy8v8KoFRG4RwjWeKtO1qs4jG00zQzljVuTJJbmVg__vIR04uxM19JnU8uRv2AV0QvWZjQMvFLWlppxYu020gY__NOesQBci7aUJhboX9mdIi6Jf56R3z92ZfrlxWvCiWe0.js"></script>
+<script src="//cdn.arduino.vn/sites/default/files/advagg_js/js__bzh0uY3h0wP16p2vug7GVZc8YwQII2MvMdP74GgvZU4__29hprtUJjUrYFd0x57Qa4s7jvCu9CPbbzQPyX0FxplE__NOesQBci7aUJhboX9mdIi6Jf56R3z92ZfrlxWvCiWe0.js" defer="defer"></script>
+<script src="//cdn.arduino.vn/sites/default/files/advagg_js/js__vC7K9zg2o4_LvpSZgZc2AxCyBJF_ibq3xex9wefkYgs__wim_NpqAXfVNrGGvj_e3w3Qt4LflhS4JXvq_CEMZtHc__NOesQBci7aUJhboX9mdIi6Jf56R3z92ZfrlxWvCiWe0.js"></script>
+<script>jQuery.extend(Drupal.settings,{"basePath":"\/","pathPrefix":"","ajaxPageState":{"theme":"arduino2016","theme_token":"G0KKyxFWs6jKAXl85duSphB33EI3sVxlnatAPxLb80I","css":{"modules\/system\/system.base.css":1,"modules\/system\/system.menus.css":1,"modules\/system\/system.messages.css":1,"modules\/system\/system.theme.css":1,"sites\/all\/modules\/date\/date_api\/date.css":1,"sites\/all\/modules\/date\/date_popup\/themes\/datepicker.1.7.css":1,"modules\/field\/theme\/field.css":1,"sites\/all\/modules\/field_hidden\/field_hidden.css":1,"modules\/node\/node.css":1,"modules\/search\/search.css":1,"modules\/user\/user.css":1,"sites\/all\/modules\/views\/css\/views.css":1,"sites\/all\/modules\/ckeditor\/css\/ckeditor.css":1,"sites\/all\/modules\/ctools\/css\/ctools.css":1,"sites\/all\/modules\/fbconnect\/fbconnect.css":1,"sites\/all\/modules\/rate\/rate.css":1,"sites\/default\/files\/sl_sprites.css":1,"sites\/all\/modules\/gauth\/gauth_login\/gauth_login.css":1,"sites\/all\/libraries\/superfish\/css\/superfish.css":1,"sites\/all\/libraries\/superfish\/style\/ktheme.css":1,"sites\/all\/themes\/arduino2016\/system.menus.css":1,"sites\/all\/themes\/arduino2016\/system.messages.css":1,"sites\/all\/themes\/arduino2016\/system.theme.css":1,"sites\/all\/themes\/arduino2016\/css\/metro.css":1,"sites\/all\/themes\/arduino2016\/css\/nprocess.css":1,"sites\/all\/themes\/arduino2016\/css\/style.css":1,"sites\/all\/modules\/prettify\/styles\/googlecode.css":1},"js":{"sites\/all\/modules\/jquery_update\/replace\/jquery\/1.10\/jquery.min.js":1,"misc\/jquery.once.js":1,"misc\/drupal.js":1,"sites\/all\/libraries\/google-code-prettify\/prettify.js":1,"sites\/all\/libraries\/google-code-prettify\/lang-css.js":1,"public:\/\/languages\/vi_93a90fQN-FyrA-_Ia5ssjsDkf9U1IfsIqx_3tJYrNm4.js":1,"sites\/all\/modules\/fbconnect\/fbconnect.js":1,"sites\/all\/modules\/prettify\/prettify.loader.js":1,"sites\/all\/modules\/captcha\/captcha.js":1,"sites\/all\/libraries\/superfish\/jquery.hoverIntent.minified.js":1,"sites\/all\/libraries\/superfish\/sfsmallscreen.js":1,"sites\/all\/libraries\/superfish\/supposition.js":1,"sites\/all\/libraries\/superfish\/superfish.js":1,"sites\/all\/libraries\/superfish\/supersubs.js":1,"sites\/all\/modules\/superfish\/superfish.js":1,"sites\/all\/themes\/arduino2016\/js\/jquery.js":1,"sites\/all\/themes\/arduino2016\/js\/swipe.jquery.js":1,"sites\/all\/themes\/arduino2016\/js\/phpjs.js":1,"sites\/all\/themes\/arduino2016\/js\/metro.js":1,"sites\/all\/themes\/arduino2016\/js\/nprocess.js":1,"sites\/all\/themes\/arduino2016\/js\/site.js":1,"sites\/all\/themes\/arduino2016\/js\/cookie.js":1}},"fbconnect":{"user_pictures":"disallow","language_code":"vi_VN","app_id":"1424185567850442","debug":0,"connect_js":"document.location.protocol + \u0027\/\/connect.facebook.net\/vi_VN\/all.js\u0027","loginout_mode":"manual","invite_name":"C\u1ed9ng \u0111\u1ed3ng Arduino Vi\u1ec7t Nam","fast_reg_mode":1,"fast_reg_autoname":1,"fbuid":0,"user":{"uid":0,"fbuid":null}},"prettify":{"linenums":false,"match":".content,#content","nocode":"no-code","custom":[],"markup":{"code":true,"pre":true,"precode":false}},"better_exposed_filters":{"views":{"node_count_by_user":{"displays":{"block_1":{"filters":[]}}}}},"superfish":{"1":{"id":"1","sf":{"delay":"10","animation":{"opacity":"show","height":"show"},"speed":10,"autoArrows":true,"dropShadows":true,"disableHI":false},"plugins":{"smallscreen":{"mode":"window_width","addSelected":false,"menuClasses":false,"hyperlinkClasses":false,"title":"Main menu"},"supposition":true,"bgiframe":false,"supersubs":{"minWidth":"12","maxWidth":"27","extraWidth":1}}}},"urlIsAjaxTrusted":{"\/sites\/all\/libraries\/ckeditor\/%3C\/body%3E%3C\/html%3E":true,"\/sites\/all\/libraries\/ckeditor\/%3C\/body%3E%3C\/html%3E?destination=sites\/all\/libraries\/ckeditor\/%3C\/body%3E%3C\/html%3E":true}});</script>
+      <!--[if lt IE 9]>
+    <script src="/sites/all/themes/zen/js/html5-respond.js"></script>
+    <![endif]-->
+  </head>
+<body class="html not-front not-logged-in one-sidebar sidebar-second page-sites page-sites-all page-sites-all-libraries page-sites-all-libraries-ckeditor page-sites-all-libraries-ckeditor- page-sites-all-libraries-ckeditor--body page-sites-all-libraries-ckeditor--body-html section-sites" >
+  <div class="grid condensed">
+          <p id="skip-link">
+        <a href="#main-menu" class="element-invisible element-focusable">Jump to navigation</a>
+      </p>
+            
+
+  <div class="row">
+    <div class="cell">
+      <header id="navigation" class="app-bar fixed-top bg-teal" data-role="appbar">
+        <div class="contai
+169A
+ner">
+          <div class="app-bar-element">
+              <a href="javascript:;" class="fg-white"><span class="mif-apps mif-2x"></span></a>
+              <div class="app-bar-drop-container bg-white fg-dark data-no-close overflow-visible" data-role="dropdown" style="width:400px;min-width: 200px;">
+                                  <div class="login-form-container padding10 bg-grayLighter"></div>
+                              </div>
+          </div>
+            <div class="region region-navigation">
+    <div id="block-superfish-1" class="block block-superfish first last odd">
+			<ul class="app-bar-menu small-dropdown"><li class=" bg-hover-darkCyan bg-active-darkCyan"><a href="/" title=""><span class="mif-home"></span></a></li><li class=" bg-hover-darkCyan bg-active-darkCyan"><a href="/tham-khao" class="dropdown-toggle">Tham khảo</a><ul class="d-menu overflow-visible" data-role="dropdown"><li class=" bg-hover-darkCyan bg-active-darkCyan"><a href="http://arduino.vn/reference/howto" title="">Tự học Arduino</a></li><li class=" bg-hover-darkCyan bg-active-darkCyan"><a href="/reference/getting-started/step1">Học Arduino cần những gì?</a></li><li class=" bg-hover-darkCyan bg-active-darkCyan"><a href="/gioi-thieu-ve-arduino" title="">Giới thiệu về Arduino</a></li><li class=" bg-hover-darkCyan bg-active-darkCyan"><a href="/raspberry-pi" title="">Raspberry Pi</a></li><li class=" bg-hover-darkCyan bg-active-darkCyan"><a href="/intel-galileo" title="">Intel Galileo</a></li><li class=" bg-hover-darkCyan bg-active-darkCyan"><a href="/tags/intel-edison" title="">Intel Edison</a></li><li class=" bg-hover-darkCyan bg-active-darkCyan"><a href="/reference">Tài liệu tham khảo</a></li><li class=" bg-hover-darkCyan bg-active-darkCyan"><a href="/chuong-trinh-mau" class="dropdown-toggle">Chương trình mẫu</a><ul class="d-menu overflow-visible" data-role="dropdown"><li class=" bg-hover-darkCyan bg-active-darkCyan"><a href="/chuong-trinh-mau/level-beginner-vo-long" title="">Beginner - Vỡ lòng</a></li><li class=" bg-hover-darkCyan bg-active-darkCyan"><a href="/chuong-trinh-mau/level-intermediate-co-kien-thuc-co-ban" title="">Intermediate - Có kiến thức cơ bản</a></li><li class=" bg-hover-darkCyan bg-active-darkCyan"><a href="http://arduino.vn/chuong-trinh-mau/level-advanced-nang-cao" title="">Advanced - Nâng cao</a></li></ul></li><li class=" bg-hover-darkCyan bg-active-darkCyan"><a href="/reference/library" title="">Thư viện</a></li><li class=" bg-hover-darkCyan bg-active-darkCyan"><a href="/reference/cac-loi-thuong-gap-tren-Arduino-va-cach-khac-phuc">Lỗi của Arduino ?</a></li><li class=" bg-hover-darkCyan bg-active-darkCyan"><a href="/dien-tu-co-ban" title="">Điện tử cơ bản</a></li><li class=" bg-hover-darkCyan bg-active-darkCyan"><a href="/lap-trinh-c" title="">Lập trình C</a></li></ul></li><li class=" bg-hover-darkCyan bg-active-darkCyan"><a href="/nao-cung-lam" title="Nào cùng làm với cộng đồng Arduino" class="dropdown-toggle">Nào cùng làm!</a><ul class="d-menu overflow-visible" data-role="dropdown"><li class=" bg-hover-darkCyan bg-active-darkCyan"><a href="/nao-cung-lam" title="">Khám phá thế giới dự án</a></li><li class=" bg-hover-darkCyan bg-active-darkCyan"><a href="/tags/c-0" title="">C Sharp (C#)</a></li><li class=" bg-hover-darkCyan bg-active-darkCyan"><a href="/nodejs" title="">NodeJS - IOT</a></li><li class=" bg-hover-darkCyan bg-active-darkCyan"><a href="/VBLUno" title="">VBLUno</a></li><li class=" bg-hover-darkCyan bg-active-darkCyan"><a href="/phan-loai-he-thong/hacking" title="">Hacking (Sẵn sàng chứ?)</a></li><li class=" bg-hover-darkCyan bg-active-darkCyan"><a href="/phan-loai-he-thong/lam-du-internet-things" title="">Internet of Things nào!</a></li><li class=" bg-hover-darkCyan bg-active-darkCyan"><a href="/iiot" title="">IoT Công nghiệp</a></li><li class=" bg-hover-darkCyan bg-active-darkCyan"><a href="/inut-platform" title="">Tự học IoT với iNut Platform</a></li></ul></li><li class=" bg-hover-darkCyan bg-active-darkCyan"><a href="/bai-viet/cach-chia-se">Đăng bài</a></li><li class=" bg-hover-darkCyan bg-active-darkCyan"><a href="/bai-viet/tai-ve-cac-tai-nguyen">Tải về</a></li><li class=" bg-hover-darkCyan bg-active-darkCyan"><a href="/cuoc-thi" title="">Cuộc thi</a></li><li class=" bg-hover-darkCyan bg-active-darkCyan"><a href="/ve-chung-toi">Về chúng tôi</a></li><li class=" bg-hover-darkCyan bg-active-darkCyan"><a href="/exam" title="">Bài tập</a></li></ul>  	</div>  </div>
+        </div>
+      </header>
+    </div>
+  </div>
+  <div class="row">
+    <div class="cell bg-grayLighter padding5">
+      <div class="header">
+        <div class="grid">
+          <div class="row cells12">
+            <div class="cell colspan2">
+              <div class="fg-teal">
+                <div class="logo">
+                                      <a href="/" title="Nhà"><img src="//cdn.arduino.vn/sites/all/themes/arduino2016/logo.png?2017" /></a>
+                                  </div>
+              </div>
+            </div>
+            <div class="cell colspan10 header-right">
+                <div class="header__region region region-header">
+    <div id="block-search-form" class="block block-search first odd" role="search">
+			<form action="/sites/all/libraries/ckeditor/%3C/body%3E%3C/html%3E" method="post" id="search-block-form" accept-charset="UTF-8"><div><h3 class="fg-orange sub-header uppercase">Bạn đang tìm kiếm điều gì?</h3>
+<div data-role="input" class="input-control text full-size">
+	<input type="text" id="edit-search-block-form--2" name="search_block_form" value="" placeholder="Vút bay..." style="padding-right: 57px;" />
+    <button class="button" type="submit"><span c
+3880
+lass="mif-search"></span></button>
+</div>
+<input type="hidden" name="form_build_id" value="form-NcOXKtMrOXVPXrs95Jxf_0TTyVuR1Os1DXD7aNk8hmE" />
+<input type="hidden" name="form_id" value="search_block_form" />
+</div></form>  	</div><div id="block-views-tips-block" class="block block-views last even">
+			<div class="view view-tips view-id-tips view-display-id-block view-dom-id-66d10f3cd959254ced49171b2df1d962">
+        
+  
+  
+      <div class="view-content">
+        <div class="views-row views-row-6 views-row-even">
+    <div class="text-right">
+	    <blockquote>
+	    	<h5 class="sub-alt-header">  
+  <div class="views-field views-field-body">        <div class="field-content"><p>Hãy <strong>tìm kiếm câu trả lời trong mục bình luận</strong>, vì có thể đã có thành viên gặp vấn đề giống bạn để có câu trả lời nhanh nhất!</p>
+</div>  </div></h5>
+	    	<a href="/"><small class="fg-grayLight">Cộng đồng Arduino Việt Nam</small></a>
+	    </blockquote>
+	</div>
+  </div>
+    </div>
+  
+  
+  
+  
+  
+  
+</div>  	</div>  </div>
+            </div>  
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <div id="main">
+  
+  <div class="row">
+    <div class="cell">
+                </div>
+  </div>
+
+    <div class="row">
+    <div class="cell">
+      <div class="main-content">
+        <div class="grid">
+          <div class="row cells4">
+                        <div class="padding10 cell colspan3 rounded article full-article">
+                                          <h1 class="page__title title" id="page-title">Không tìm thấy trang</h1>
+                                                                                                  
+
+
+Không tìm thấy trang "/sites/all/libraries/ckeditor/%3C/body%3E%3C/html%3E".<div id="block-block-37" class="block block-block last even">
+			<p><a href="https://mysmarthome.com.vn/sanpham/?product_id=269">Cửa cuốn thông minh</a></p>
+  	</div>                          </div>
+                          <div class="cell">
+                  <section class="region region-sidebar-second column sidebar">
+    <div id="block-block-11" class="block block-block first odd">
+			<style type="text/css">
+<!--/*--><![CDATA[/* ><!--*/
+.blink {
+  animation: blink-animation 1s steps(5, start) infinite;
+  -webkit-animation: blink-animation 1s steps(5, start) infinite;
+}
+@keyframes blink-animation {
+  to {
+    visibility: hidden;
+  }
+}
+@-webkit-keyframes blink-animation {
+  to {
+    visibility: hidden;
+  }
+}
+
+/*--><!]]>*/
+</style><div class="rtecenter">
+<p><strong><span class="blink" style="color:#FF0000;">Tham gia</span> <a href="https://www.facebook.com/groups/Arduino.VN.offical/">Group Facebook</a> <span style="color:#FF0000;">để trao đổi nhanh hơn với BQT và các tác giả!</span></strong></p>
+<p><strong><span style="color:#FF0000;"><a href="https://www.facebook.com/groups/Arduino.VN.offical/"><img alt="" src="http://k2.arduino.vn/img/2018/04/28/0/4108_882450-1524860882-0-27908431-879854848842625-7736846220984665369-o.jpg" style="width: 291px; height: 175px;" /></a></span></strong></p>
+<p><iframe allow="autoplay; encrypted-media" allowfullscreen="" frameborder="0" height="250" scrolling="no" src="https://www.youtube.com/embed/wRY7rcMTZZg" width="100%"></iframe></p>
+<div class="rtecenter">
+<p><span style="font-size:14px;"><font class="blink" color="#008080"><b>Liên hệ Mr. Khánh 097.276.8491 để được tư vấn triển khai các dự án IoT</b></font></span></p>
+<div>
+<div class="rtecenter">
+<p><span style="font-size:14px;"><span style="color:#FF0000;"><b>Liên hệ Mr. Đạt ZN 037.3998.468 tư vấn đồ án môn học</b></span></span></p>
+<div>
+<div class="rtecenter">
+<p><span style="font-size:14px;"><span style="color:#FF8C00;"><b>Liên hệ Mr. Thân 097.111.3732 để tư vấn thiết kế PCB chất lượng cao 2-40 lớp </b></span></span></p>
+<div> </div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="rtecenter" id="fb-root"><a a="" class="blink" href="https://platform.mysmarthome.vn/xem-them-ve-inut" i="" inut="" iot="" m="" n=""> </a></div>
+<p><a a="" class="blink" href="https://platform.mysmarthome.vn/xem-them-ve-inut" i="" inut="" iot="" m="" n=""></p>
+<script>
+<!--//--><![CDATA[// ><!--
+(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) return;
+  js = d.createElement(s); js.id = id;
+  js.src = "//connect.facebook.net/vi_VN/sdk.js#xfbml=1&version=v2.5&appId=1424185567850442";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));
+//--><!]]>
+</script><p></a></p>
+<div class="fb-page" data-adapt-container-width="true" data-height="70" data-hide-cover="false" data-href="https://www.facebook.com/Arduino.Vietnam" data-show-facepile="true" data-small-header="true" data-tabs="timeline">
+<div class="fb-xfbml-parse-ignore">
+<blockquote cite="https://www.facebook.com/Arduino.Vietnam"><p><a href="https://www.facebook.com/Arduino.Vietnam">Cộng đồng Arduino Việt Nam</a></p></blockquote>
+</div>
+</div>
+<div class="fb-page" data-adapt-container-width="true" data-height="70" data-hide-cover="false" data-href="https://www.facebook.com/IntelGalileo.VN" data-show-facepile="true" data-small-header="true" data-tabs="timeline">
+<div class="fb-xfbml-parse-ignore">
+<blockquote cite="https://www.facebook.com/IntelGalileo.VN"><p><a href="https://www.facebook.com/IntelGalileo.VN">Cộng đồng Intel Galileo Việt Nam</a></p></blockquote>
+</div>
+</div>
+<div class="fb-page" data-adapt-container-width="true" data-height="70" data-hide-cover="false" data-href="https://www.facebook.com/RaspberryPiVietNamCommunity" data-show-facepile="true" data-small-header="true" data-tabs="timeline">
+<div class="fb-xfbml-parse-ignore">
+<blockquote cite="https://www.facebook.com/RaspberryPiVietNamCommunity"><p><a href="https://www.facebook.com/RaspberryPiVietNamCommunity">Cộng đồng Raspberry Pi Việt Nam</a></p></blockquote>
+</div>
+</div>
+  	</div><div id="block-user-login" class="block block-user even" role="form">
+			<div class="panel">
+						
+		    <div class="heading bg-teal" class="block__title block-title">
+		        <span class="title uppercase">Đăng nhập</span>
+		    </div>
+			
+					    
+		    <div class="content padding10">
+		        <form action="/sites/all/libraries/ckeditor/%3C/body%3E%3C/html%3E?destination=sites/all/libraries/ckeditor/%3C/body%3E%3C/html%3E" method="post" id="user-login-form" accept-charset="UTF-8"><div><div class="form-item form-type-textfield form-item-name">
+  <label for="edit-name">Tên người dùng <span class="form-required" title="Trường dữ liệu này là bắt buộc.">*</span></label>
+ <input type="text" id="edit-name" name="name" value="" size="15" maxlength="60" class="form-text required" />
+</div>
+<div class="form-item form-type-password form-item-pass">
+  <label for="edit-pass">Mật khẩu <span class="form-required" title="Trường dữ liệu này là bắt buộc.">*</span></label>
+ <input type="password" id="edit-pass" name="pass" size="15" maxlength="128" class="form-text required" />
+</div>
+<div class="item-list"><ul><li class="first"><a href="/user/register" title="Tạo tài khoản người dùng mới.">Tạo tài khoản mới</a></li>
+<li class="last"><a href="/user/password" title="Yêu cầu gửi mật khẩu mới qua thư điện tử.">Yêu cầu mật khẩu mới</a></li>
+</ul></div><input type="hidden" name="form_build_id" value="form-hTp9Pt7E9Ej9U3brDECTZNvCv6V8xUam13T5jExWXGA" />
+<input type="hidden" name="form_id" value="user_login_block" />
+<div id="fbconnect_button" class="form-item form-type-item">
+  <label for="fbconnect_button">Đăng nhập bằng Facebook </label>
+ <fb:login-button  size="large" background="dark" v="3" data-scope="email">Connect</fb:login-button>
+</div>
+<fieldset class="captcha form-wrapper"><legend><span class="fieldset-legend">Mã kiểm tra</span></legend><div class="fieldset-wrapper"><div class="fieldset-description">Vui lòng nhập vào mã kiểm tra ở ô bên cạnh</div><input type="hidden" name="captcha_sid" value="102413569" />
+<input type="hidden" name="captcha_token" value="563e3c994235d61b089d3b67859e380e" />
+<input type="hidden" name="captcha_response" value="Google no captcha" />
+<div class="g-recaptcha" data-sitekey="6Lc08xsUAAAAAIpcHBasDIX0-ebY3GkCXR_963el" data-theme="light" data-type="image"></div></div></fieldset>
+<div class="form-actions form-wrapper" id="edit-actions--2"><input type="submit" id="edit-submit--2" name="op" value="Đăng nhập" class="form-submit" /></div><input type="submit" id="edit-submit-google" name="op" value="" class="form-submit" /></div></form>		    </div>
+		</div>
+	</div><div id="block-block-20" class="block block-block odd">
+			<p class="rtecenter">
+<iframe allowfullscreen="" frameborder="0" height="230" scrolling="no" src="https://www.youtube.com/embed/zczdCQ1_PIw" width="560"></iframe></p>
+<h3 class="rtecenter"><a href="http://arduino.vn/bai-viet/diem-cong-dong/giai-thuong"><span style="color:#FF8C00;"><strong>Chia sẻ tình yêu với </strong></span></a></h3>
+<h3 class="rtecenter"><a href="http://arduino.vn/bai-viet/diem-cong-dong/giai-thuong"><span style="color:#FF8C00;"><strong><img alt="" src="http://k2.arduino.vn/img/2016/07/14/0/2678_882450-1468511881-0-icon-hot.gif" style="width: 30px; height: 12px;" /> </strong></span><span style="color:#008080;"><strong>Arduino</strong></span></a> <a href="http://arduino.vn/bai-viet/diem-cong-dong/giai-thuong"><span style="color: rgb(255, 140, 0);"><strong><img alt="" src="http://k2.arduino.vn/img/2016/07/14/0/2678_882450-1468511881-0-icon-hot.gif" style="width: 30px; height: 12px;" /></strong></span></a></h3>
+  	</div><div id="block-disqus-disqus-recent-comments" class="block block-disqus even">
+			<div class="panel">
+						
+		    <div class="heading bg-teal" class="block__title block-title">
+		        <span class="title uppercase">Bình luận gần đây</span>
+		    </div>
+			
+					    
+		    <div class="content padding10">
+		        <div id="dsq-recentcomments" class="dsq-widget"><script src="https://disqus.com/forums/arduinovnn/recent_comments_widget.js?num_items=10&amp;excerpt_length=170&amp;avatar_size=32"></script>
+</div>		    </div>
+		</div>
+	</div><div id="block-disqus-disqus-popular-threads" class="block block-disqus odd">
+			<div class="panel">
+						
+		    <div class="heading bg-teal" class="block__title block-title">
+		        <span class="title uppercase">Bài đọc nhiều</span>
+		    </div>
+			
+					    
+		    <div class="content padding10">
+		        <div id="dsq-popthreads" class="dsq-widget"><script src="https://disqus.com/forums/arduinovnn/popular_threads_widget.js?num_items=10"></script>
+</div>		    </div>
+		</div>
+	</div><div id="block-block-4" class="block block-block last even">
+			<p><a href="https://masocongty.vn" style="text-decoration:none;"><span style="color:#FFFFFF;">mã số thuế</span></a></p>
+<p> </p>
+  	</div>  </section>
+              </div>
+                      </div>
+        </div>
+      </div>
+    </div>
+  </div>
+<div class="row cells4 footer-column">
+      <div class="cell hide">
+        <div class="region region-footer-firstcolumn">
+    <div id="block-user-online" class="block block-user first last odd" role="complementary">
+			<div class="panel">
+						
+		    <div class="heading bg-teal" class="block__title block-title">
+		        <span class="title uppercase">Thành viên trực tuyến</span>
+		    </div>
+			
+					    
+		    <div class="content padding10">
+		        <p>Hiện đang có 26 người trực tuyến.</p><div class="item-list"><ul><li class="first"><a href="/users/tuan-long" title="Xem hồ sơ người dùng." class="username" xml:lang="" about="/users/tuan-long" typeof="sioc:UserAccount" property="foaf:name" datatype="">Tuan Long</a></li>
+<li><a href="/users/lam-xuan-huong" title="Xem hồ sơ người dùng." class="username" xml:lang="" about="/users/lam-xuan-huong" typeof="sioc:UserAccount" property="foaf:name" datatype="">Lam Xuan Huong</a></li>
+<li><a href="/users/harryjes" title="Xem hồ sơ người dùng." class="username" xml:lang="" about="/users/harryjes" typeof="sioc:UserAccount" property="foaf:name" datatype="">HarryJes</a></li>
+<li><a href="/users/richardhaf" title="Xem hồ sơ người dùng." class="username" xml:lang="" about="/users/richardhaf" typeof="sioc:UserAccount" property="foaf:name" datatype="">Richardhaf</a></li>
+<li class="last"><a href="/users/richardraf" title="Xem hồ sơ người dùng." class="username" xml:lang="" about="/users/richardraf" typeof="sioc:UserAccount" property="foaf:name" datatype="">Richardraf</a></li>
+</ul></div>		    </div>
+		</div>
+	</div>  </div>
+    </div>
+    <div class="cell hide">
+        <div class="region region-footer-secondcolumn">
+    <div id="block-user-new" class="block block-user first last odd" role="complementary">
+			<div class="panel">
+						
+		    <div class="heading bg-teal" class="block__title block-title">
+		        <span class="title uppercase">Thành viên mới</span>
+		    </div>
+			
+					    
+		    <div class="content padding10">
+		        <div class="item-list"><ul><li class="first"><a href="/users/harryjes" title="Xem hồ sơ người dùng." class="username" xml:lang="" about="/users/harryjes" typeof="sioc:UserAccount" property="foaf:name" datatype="">HarryJes</a></li>
+<li><a href="/users/richardhaf" title="Xem hồ sơ người dùng." class="username" xml:lang="" about="/users/richardhaf" typeof="sioc:UserAccount" property="foaf:name" datatype="">Richardhaf</a></li>
+<li><a href="/users/richardraf" title="Xem hồ sơ người dùng." class="username" xml:lang="" about="/users/richardraf" typeof="sioc:UserAccount" property="foaf:name" datatype="">Richardraf</a></li>
+<li><a href="/users/rogerrop" title="Xem hồ sơ người dùng." class="username" xml:lang="" about="/users/rogerrop" typeof="sioc:UserAccount" property="foaf:name" datatype="">Rogerrop</a></li>
+<li><a href="/users/kevinwap" title="Xem hồ sơ người dùng." class="username" xml:lang="" about="/users/kevinwap" typeof="sioc:UserAccount" property="foaf:name" datatype="">Kevinwap</a></li>
+<li><a href="/users/chrisfouts" title="Xem hồ sơ người dùng." class="username" xml:lang="" about="/users/chrisfouts" typeof="sioc:UserAccount" property="foaf:name" data
+10E6
+type="">Chrisfouts</a></li>
+<li><a href="/users/vernoncremo" title="Xem hồ sơ người dùng." class="username" xml:lang="" about="/users/vernoncremo" typeof="sioc:UserAccount" property="foaf:name" datatype="">VernonCremo</a></li>
+<li class="last"><a href="/users/michaelnet" title="Xem hồ sơ người dùng." class="username" xml:lang="" about="/users/michaelnet" typeof="sioc:UserAccount" property="foaf:name" datatype="">Michaelnet</a></li>
+</ul></div>		    </div>
+		</div>
+	</div>  </div>
+    </div>
+    <div class="cell">
+        <div class="region region-footer-thirdcolumn">
+    <div id="block-block-1" class="block block-block first last odd">
+			<div class="panel">
+						
+		    <div class="heading bg-teal" class="block__title block-title">
+		        <span class="title uppercase">Về chúng tôi</span>
+		    </div>
+			
+					    
+		    <div class="content padding10">
+		        <p class="rtejustify"><a href="http://arduino.vn">Arduino.vn</a> được xây dựng trên nền tảng Drupal 7, phiên bản hiện tại 2.3 tên mã <a href="http://arduino.vn/changelog">Chia sẻ tình yêu với Arduino</a>.</p>
+<p class="rtejustify">Đây là trang thông tin phi lợi nhuận ra đời hướng tới cộng đồng trẻ, những chủ nhân tương lai của đất nước. <strong><a href="http://arduino.vn/ve-chung-toi">Tìm hiểu thêm</a></strong></p>
+		    </div>
+		</div>
+	</div>  </div>
+    </div>
+    <div class="cell">
+        <div class="region region-footer-fourthcolumn">
+    <div id="block-block-2" class="block block-block first last odd">
+			<div class="panel">
+						
+		    <div class="heading bg-teal" class="block__title block-title">
+		        <span class="title uppercase">Liên kết</span>
+		    </div>
+			
+					    
+		    <div class="content padding10">
+		        <p>Một sản phẩm hợp tác với Machtudong</p>
+<p class="rtecenter"><img alt="" src="http://whos.amung.us/widget/grzxrak875oi.png" /></p>
+<script>
+<!--//--><![CDATA[// ><!--
+
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-103385129-1', 'auto');
+  ga('send', 'pageview');
+
+
+//--><!]]>
+</script>		    </div>
+		</div>
+	</div>  </div>
+    </div>
+    </div>
+<div class="row">
+  <div class="cell footer">
+      <div class="region region-bottom">
+    <div id="block-block-3" class="block block-block first odd">
+			<div style="margin: 0; padding-top:15px;"><a class="dmca-badge" href="http://www.dmca.com/Protection/Status.aspx?ID=78aa6fcb-6c63-4023-b42d-872e89882865" style="line-height: 1.6;" title="DMCA.com Protection Program"><img alt="DMCA.com Protection Status" src="//images.dmca.com/Badges/dmca_protected_sml_120m.png?ID=78aa6fcb-6c63-4023-b42d-872e89882865" style="border-style:solid; border-width:0px" /></a>      <a href="http://creativecommons.org/licenses/by-sa/4.0/" rel="license" style="line-height: 1.6; font-family: 'courier new', courier, monospace;"><img alt="Creative Commons License" src="http://i.creativecommons.org/l/by-sa/4.0/88x31.png" style="border-style:solid; border-width:0px" /></a><br /><span style="font-size:14px"><span style="font-family:verdana,geneva,sans-serif">Nội dung trên trang <a href="http://arduino.vn/" style="font-family: 'courier new', courier, monospace; font-size: 14px; line-height: 1.6;">Arduino.vn</a> được phân phối theo giấy phép <a href="http://creativecommons.org/licenses/by-sa/4.0/" rel="license" style="font-family: 'courier new', courier, monospace; font-size: 14px; line-height: 1.6;">Creative Commons Attribution-ShareAlike 4.0 International License</a>.</span></span><br /><span style="font-size:14px"><span style="font-family:verdana,geneva,sans-serif">Vui lòng ghi rõ nguồn và link về bài gốc nếu bạn tham khảo nội dung từ <a href="http://masocongty.vn" target="_blank" style="color:#000000;text-decoration: none;">website</a> này.</span></span></div>
+  	</div><div id="block-block-33" class="block block-block last even">
+			<p><script async="" src="https://www.googletagmanager.
+F38
+com/gtag/js?id=UA-131236030-1"></script><script type="javascript">
+<!--//--><![CDATA[// ><!--
+
+
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-131236030-1');
+
+//--><!]]>
+</script></p>
+  	</div>  </div>
+  </div>
+</div>
+<div data-role="dialog" id="dialog-place-top-center" class="padding20 dialog bg-darkTeal fg-white" data-close-button="true" data-place="top-center">
+  <h3 class="header">Bạn ơi ^_^!</h3>
+  <div class="content align-center"></div>
+  <div class="fblike align-center"></div>
+  <div class="fanpage align-center">
+    <div class="fb-like" data-href="https://www.facebook.com/Arduino.Vietnam/?fref=ts" data-layout="button_count" data-action="recommend" data-size="small" data-show-faces="true" data-share="true"></div>
+  </div>
+</div>
+
+<div class="charm charmMobile" data-role="charm" data-position="right">
+  <h2 class="header">Mục lục</h2>
+  <div class="content" style="display:none;;">
+  </div>
+    <div class="region region-charm-guest">
+    <div id="block-block-19" class="block block-block first last odd">
+			<p>Hãy trở thành thành viên của Cộng đồng Arudino Việt Nam để mở khóa chức năng này.</p>
+  	</div>  </div>
+</div>
+
+<button class="button warning block-shadow-warning text-shadow large-button fixed-bottom menu-toggle" style="display: none;">Mục lục</button>
+<div style="display: none;"></div>
+
+
+<div data-role="dialog" id="login-please" class="padding20" data-close-button="true" data-type="info">
+    <h1>Bạn ơi</h1>
+    <p>
+        Cùng <a href="/user/login" class="fg-yellow"><strong>đăng nhập</strong></a> vào <strong>Cộng đồng Arduino Việt Nam</strong> để mở hết các chức năng của Cộng đồng nhé.
+    </p>
+    <span class="dialog-close-button"></span>
+</div>
+<script type="text/javascript">
+function showDialog(id){
+    var dialog = $(id).data('dialog');
+    dialog.open();
+    $("#login-please a").click(function() {
+      if (!$(".app-bar-element form input").length)
+        return true;
+      $("#login-please").hide();
+      $(".app-bar-element > a").last().click();
+      return false;
+    });
+}
+$(document).ready(function() {
+  $(".dialog-close-button").click(function() {
+    $("#login-please").hide();
+    $.cookie('timer1', 0);
+  });
+  var max = 60000 * 4;
+  if (intval($.cookie('timer1')) < max) {
+
+    var interval = setInterval(function() {
+      $.cookie('timer1', intval($.cookie('timer1')) + 1000);
+      if (intval($.cookie('timer1')) >= max) {
+        clearInterval(interval);
+        showDialog('#login-please');
+      } else 
+        console.log($.cookie('timer1'));
+    }, 1000);
+  } else 
+    showDialog('#login-please');
+})
+  
+</script>
+      <div class="region region-page-bottom">
+    <div id="fb-root"></div>
+      <script type="text/javascript">
+        window.fbAsyncInit = function() {
+          FB.init({
+            appId : '1424185567850442',
+            cookie : true, // enable cookies to allow the server to access the session
+            xfbml : true,
+            logging: '0',
+            channelURL: 'http://arduino.vn/sites/all/modules/fbconnect/channel.html',
+            oauth  : true
+          });
+          // whenever the user logs in, we tell our login service
+          FB.Event.subscribe('auth.login', function() {
+            window.location.reload();
+          });
+          FB.Event.subscribe('auth.logout', function(response) {
+            window.location.reload();
+          });
+
+          jQuery(document).trigger('fb:init');
+        };
+
+        (function() {
+          var e = document.createElement('script');
+          e.src = document.location.protocol + '//connect.facebook.net/vi_VN/all.js';
+          e.async = true;
+          document.getElementById('fb-root').appendChild(e);
+        }());
+      </script>  </div>
+  </div>
+</body>
+</html>
+
+0
+
